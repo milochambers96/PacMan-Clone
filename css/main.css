@@ -1,0 +1,31 @@
+* {
+    box-sizing: border-box;
+}
+
+#grid-container {
+    width: 1000px;
+    margin: 0 auto; 
+}
+
+#grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;  
+    height: 500px; 
+}
+
+#grid div {
+    flex: 0 0 5%; 
+    height: 6.6667%;  
+    border: 1px solid black;
+    box-sizing: border-box; 
+}
+
+
+.pacman {
+    background-color: yellow;
+}
+
+.ghost {
+    background-color: red;
+}
