@@ -38,6 +38,11 @@ function init() {
     }
     createGrid();
 
+
+    function isValidMove(position) {
+        return position >= 0 && position < gridSize && !cells[position].classList.contains('wall')
+    }
+
     //! Code to move and contol PacMan
 
     cells[PacManCell].classList.add("pacman");
@@ -73,7 +78,8 @@ function init() {
                 }
                 break;
         }
-        if (newPacManCell !== PacManCell) {
+
+        if (newPacManCell !== PacManCell && isValidMove(newPacManCell)) {
             removePacMan(PacManCell);
             PacManCell = newPacManCell;
             addPacMan(PacManCell);
@@ -94,10 +100,7 @@ function init() {
         cells[position].classList.add("ghost");
     }
 
-    function isValidMove(position) {
-        return position >= 0 && position < gridSize && !cells[position].classList.contains('wall')
-    }
-
+    
     //!Functions to move Ghost
 
     function moveGhost() {
