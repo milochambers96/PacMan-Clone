@@ -1,15 +1,27 @@
 function init() {
     const grid = document.querySelector('#grid');
 
-    const height = 15;
-    const width = 20
+    const height = 10;
+    const width = 10;
     const gridSize = width * height
     const cells = []
+
+    let PacManCell = 11;
+    let ghostCell = 86;
+
+    const mazeLayout = [
+        1,1,1,1,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,1,
+        1,0,1,1,1,0,1,1,0,1,
+        1,0,1,0,0,0,0,1,0,1,
+        1,0,1,0,1,1,0,1,0,1,
+        1,0,0,0,0,0,0,1,0,1,
+        1,0,1,1,1,1,0,1,0,1,
+        1,0,0,0,0,1,0,1,0,1,
+        1,1,1,1,0,1,0,1,0,1,
+        1,1,1,1,1,1,1,1,1,1
+    ];
     
-    let PacManCell = 0;
-    let ghostCell = 100;
-    
-// -------------------------------------------------------
 
     function createGrid() {
         for (let i = 0; i < gridSize; i++) {
@@ -17,9 +29,14 @@ function init() {
             cell.classList.add('cell');
             grid.appendChild(cell);
             cells.push(cell);
+            if (mazeLayout[i] === 1) {
+                cell.classList.add('wall');
+            } else {
+                cell.classList.add('path');
+            }
         }
     }
-    createGrid()
+    createGrid();
 
     //! Code to move and contol PacMan
 
@@ -78,7 +95,7 @@ function init() {
     }
 
     function isValidMove(position) {
-        return position >= 0 && position < gridSize && !cells[position].classList.contains('wall') 
+        return position >= 0 && position < gridSize && !cells[position].classList.contains('wall')
     }
 
     //!Functions to move Ghost
@@ -88,28 +105,28 @@ function init() {
         const ghostCol = ghostCell % width;
         const pacManRow = Math.floor(PacManCell / width);
         const pacManCol = PacManCell % width;
-    
+
         let bestMove = null;
         let minDistance = Infinity;
-    
+
         const possibleMoves = [
-            { direction: 'Up', move: -width, newRow: ghostRow - 1, newCol: ghostCol },     
-            { direction: 'Down', move: width, newRow: ghostRow + 1, newCol: ghostCol },     
-            { direction: 'Left', move: -1, newRow: ghostRow, newCol: ghostCol - 1 },       
-            { direction: 'Right', move: 1, newRow: ghostRow, newCol: ghostCol + 1 }  
+            { direction: 'Up', move: -width, newRow: ghostRow - 1, newCol: ghostCol },
+            { direction: 'Down', move: width, newRow: ghostRow + 1, newCol: ghostCol },
+            { direction: 'Left', move: -1, newRow: ghostRow, newCol: ghostCol - 1 },
+            { direction: 'Right', move: 1, newRow: ghostRow, newCol: ghostCol + 1 }
         ];
-    
-        for (const {move, newRow, newCol} of possibleMoves) {
+
+        for (const { move, newRow, newCol } of possibleMoves) {
             const newPosition = ghostCell + move;
             if (isValidMove(newPosition)) {
-                const newDistance = Math.abs(pacManRow - newRow) + Math.abs(pacManCol - newCol);        
+                const newDistance = Math.abs(pacManRow - newRow) + Math.abs(pacManCol - newCol);
                 if (newDistance < minDistance) {
                     minDistance = newDistance;
                     bestMove = move;
                 }
             }
         }
-    
+
         if (bestMove !== null) {
             const newPosition = ghostCell + bestMove;
             if (newPosition !== ghostCell) {
@@ -119,9 +136,9 @@ function init() {
             }
         }
     }
-    
+
     setInterval(moveGhost, 1000)
 
-    }
+}
 
-    window.addEventListener("DOMContentLoaded", init)
+window.addEventListener("DOMContentLoaded", init)

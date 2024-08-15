@@ -2,30 +2,52 @@
     box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000;
+}
+
 #grid-container {
-    width: 1000px;
-    margin: 0 auto; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    width: 30vw; 
+    height: 60vh; 
 }
 
 #grid {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;  
-    height: 500px; 
+    width: 100%; 
+    height: 100%; 
 }
 
-#grid div {
-    flex: 0 0 5%; 
-    height: 6.6667%;  
-    border: 1px solid black;
-    box-sizing: border-box; 
+.cell {
+    flex: 1 0 10%; 
+    height: 0; 
+    padding-bottom: 10%; 
+    box-sizing: border-box;
 }
 
+.wall {
+    background-color: blue; 
+}
+
+.path {
+    background-color: #000;
+}
 
 .pacman {
     background-color: yellow;
+    border-radius: 50%;
 }
 
 .ghost {
     background-color: red;
+    border-radius: 50%;
 }
