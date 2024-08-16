@@ -5,7 +5,6 @@ function init() {
     let lives = 3;
     let score = 0;
 
-
     const height = 10;
     const width = 10;
     const gridSize = width * height;
@@ -29,6 +28,9 @@ function init() {
             }
         }
     };
+
+
+    
 
     function movePacMan(event) {
         let newPosition;
@@ -57,8 +59,10 @@ function init() {
         if (newPosition !== undefined) {
             PacMan.move(newPosition);
         }
+        pacmanAteAPellet()
     }
 
+    
     window.addEventListener("keydown", movePacMan);
 
 
@@ -84,8 +88,8 @@ function init() {
     };
 
 
-    // Create the grid and maze
-    function createGrid() {
+     // Create the grid and maze
+     function createGrid() {
         for (let i = 0; i < gridSize; i++) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
@@ -94,13 +98,40 @@ function init() {
             if (mazeLayout[i] === 1) {
                 cell.classList.add('wall');
             } else {
-                cell.classList.add('path');
+                cell.classList.add('path')
+                //cell.classList.add('pellet');
+                const pellet = document.createElement('div');
+                pellet.classList.add('pellet');
+                cell.appendChild(pellet);
             }
         }
         PacMan.displayPacMan();
         Ghost.displayGhost();
     }
     createGrid();
+
+    //code relating to pellets.
+    const arrayofPellets = Array.from(document.querySelectorAll('.pellet'))
+    let pellets = arrayofPellets.length
+
+    function pacmanAteAPellet() {
+        arrayofPellets.forEach((pellet) =>  {
+            if (pellet.parentElement && pellet.parentElement.classList.contains('pacman')) {
+                pellet.parentElement.removeChild(pellet)
+                pellets--;
+                score+=10;
+                scoreText.textContent = `Score: ${score}`
+            }
+        })
+        if (pellets === 0) {
+            gameComplete()
+        }
+
+    }
+
+    function gameComplete() {
+        alert("You win")
+    }
 
     function isValidMove(position) {
         // Check if position is within the grid boundaries
@@ -150,7 +181,7 @@ function init() {
                 const distance = Math.abs(pacmanRow - newRow) + Math.abs(pacmanCol - newCol);
     
                 
-                console.log(`Move: ${direction}, Ghost's New Position: ${newPosition}, Distance from PacMan: ${distance}`);
+                //console.log(`Move: ${direction}, Ghost's New Position: ${newPosition}, Distance from PacMan: ${distance}`);
                 // if distance is not working
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -167,7 +198,7 @@ function init() {
         }
     }
     
-    setInterval(moveGhost, 1000);
+    setInterval(moveGhost, 500);
 
     function ghostGotPacMan() {
         if (lives <= 0) {
@@ -184,15 +215,17 @@ function init() {
         livesText.textContent = `Lives: ${lives}`;
         score = 0;
         scoreText.textContent = `Score: ${score}`;
+        alert("Game over")
         resetPositions();
     }
 
     function resetPositions() { 
         PacMan.position = 11; // Reset Pac-Man position
         Ghost.position = 86; // Reset Ghost position
-        PacMan.displayPacMan(); // Update Pac-Man display
-        Ghost.displayGhost(); // Update Ghost display
+        PacMan.displayPacMan(); 
+        Ghost.displayGhost(); 
     }
+
    
 }
 window.addEventListener("DOMContentLoaded", init);
