@@ -11,6 +11,37 @@ body {
     background-color: #000;
 }
 
+.arcade-machine {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    color:#FFFF00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-shadow: 2px 2px 0 #000000, 4px 4px 0 #FFFF00;
+}
+
+.UI {
+    background-color:#000080;
+    display: flex;
+    width: 100%; 
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding:10px;
+    border: 5px solid #FFFF00; /* Bright yellow border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+#score, #lives {
+    color: #FFFF00; 
+    font-size: 16px; 
+    line-height: 1.2; 
+}
+
 #grid-container {
     display: flex;
     justify-content: center;
@@ -18,6 +49,8 @@ body {
     background-color: #000;
     width: 30vw; 
     height: 60vh; 
+    border: 5px solid #FFFF00;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 
 #grid {
@@ -35,7 +68,11 @@ body {
 }
 
 .wall {
-    background-color: blue; 
+    background-color: #0000FF;
+}
+
+.pellet {
+    background-color: green; 
 }
 
 .path {
@@ -43,11 +80,11 @@ body {
 }
 
 .pacman {
-    background-color: yellow;
+    background-color: #FFFF00;
     border-radius: 50%;
 }
 
 .ghost {
-    background-color: red;
+    background-color: #FF0000;
     border-radius: 50%;
 }
