@@ -59,7 +59,8 @@ function init() {
         if (newPosition !== undefined) {
             PacMan.move(newPosition);
         }
-        pacmanAteAPellet()
+        pacmanAteAPellet();
+        checkCollision();
     }
 
     
@@ -123,14 +124,14 @@ function init() {
                 scoreText.textContent = `Score: ${score}`
             }
         })
-        if (pellets === 0) {
+        if (pellets <= 0) {
             gameComplete()
         }
 
     }
 
     function gameComplete() {
-        alert("You win")
+        alert(`You win, your score is: ${score}`)
     }
 
     function isValidMove(position) {
@@ -153,10 +154,7 @@ function init() {
         const ghostPosition = Ghost.position;
         const pacmanPosition = PacMan.position;
 
-        if (ghostPosition === pacmanPosition) {
-            ghostGotPacMan()
-            return
-        }
+        
     
         const directions = [
             { move: width, direction: 'down' },   
@@ -182,7 +180,6 @@ function init() {
     
                 
                 //console.log(`Move: ${direction}, Ghost's New Position: ${newPosition}, Distance from PacMan: ${distance}`);
-                // if distance is not working
                 if (distance < minDistance) {
                     minDistance = distance;
                     bestMove = move;
@@ -193,6 +190,7 @@ function init() {
         // If a best move is found, update the ghost's position
         if (bestMove !== null) {
             Ghost.move(ghostPosition + bestMove);
+            checkCollision()
         } else {
             console.log('No valid moves available for the ghost.');
         }
@@ -200,19 +198,31 @@ function init() {
     
     setInterval(moveGhost, 500);
 
+    function checkCollision() {
+        if (Ghost.position === PacMan.position) {
+            ghostGotPacMan()
+        }         
+    }
+
     function ghostGotPacMan() {
-        if (lives <= 0) {
+        if (lives === 0) {
             gameOver()
             return
         }
+        if (lives === 1) {
+            livesText.textContent = 'Final Life';
+            lives--
+            resetPositions();
+            return;
+        }
         lives--;
-        livesText.textContent = `Lives: ${lives}`;
+        livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
         resetPositions();      
     }
 
     function gameOver() {
         lives = 3;
-        livesText.textContent = `Lives: ${lives}`;
+        livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
         score = 0;
         scoreText.textContent = `Score: ${score}`;
         alert("Game over")
@@ -220,8 +230,8 @@ function init() {
     }
 
     function resetPositions() { 
-        PacMan.position = 21; // Reset Pac-Man position
-        Ghost.position = 86; // Reset Ghost position
+        PacMan.position = 21; 
+        Ghost.position = 86; 
         PacMan.displayPacMan(); 
         Ghost.displayGhost(); 
     }
