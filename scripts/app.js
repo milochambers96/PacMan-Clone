@@ -72,7 +72,6 @@ function init() {
     const Ghost = {
         position: 86,
         currentCell: null,
-        previousMove: null,
         displayGhost() {
             if (this.currentCell) {
                 this.currentCell.classList.remove('ghost');
@@ -88,6 +87,10 @@ function init() {
             }
         }
     };
+
+    const ambusherGhost = {
+        position: 137,
+    }
 
     // Create the grid and maze
     function createGrid() {
@@ -146,12 +149,25 @@ function init() {
 
     function powerUp() {
         if (powerPelletActive) {
+
             return
             //powerPellet.classList.add('power-pellet');
             //cell.appendChild(powerPellet)
         }
         powerPelletActive = true;
     }
+
+    let powerUpInterval = setInterval(powerUp, 1000);
+
+    setTimeout(() => {
+        clearInterval(powerUpInterval)
+        powerPelletActive = false
+    }, 10000)
+
+
+    
+
+
 
     function gameComplete() {
         alert(`You win, your score is: ${score}`)
@@ -170,7 +186,7 @@ function init() {
         return true;
     }
 
-    
+
 
     function bfs(start, destination) {
         const directions = [
@@ -211,11 +227,11 @@ function init() {
         const ghostPosition = Ghost.position;
         const pacmanPosition = PacMan.position;
         const path = bfs(ghostPosition, pacmanPosition)
-        console.log('The path is:' + path)
+        //console.log('The path is:' + path)
 
         if (path.length > 0) {
             const nextMove = path[0];
-            console.log(nextMove)
+            //console.log(nextMove)
 
             let move;
             switch (nextMove) {
@@ -252,19 +268,30 @@ function init() {
         }
     }
 
-    // function pacManGotGhost() {
-    //     score +=250;
-    //     resetGhosts()
-    // }
+    function pacManGotGhost() {
+        score += 250;
+        resetEatenGhosts()
+    }
 
-    // function resetGhosts(collisionPosition) {
-    //     const collisionPosition = PacMan.position
-    //     let safeplace = 0;
-    //     cells.forEach((cell) => {
-    //         cell[]
-    //     })
-        
-    // }
+    function resetEatenGhosts()  { 
+        const collisionPoint = PacMan.position
+        let maxDistance = -1;
+        let bestPosition = -1;
+        for (let i = 0; i < cells.length; i++) {
+            if (!cells[i].classList.contains('wall')) {
+                distance = Math.abs(i - collisionPoint);
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                    bestPosition = i
+                }
+            }
+        }
+        if (bestPosition !== -1) {
+            Ghost.position = bestPosition;
+            Ghost.displayGhost()
+        }
+    }
+
 
 
 
