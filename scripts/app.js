@@ -134,7 +134,7 @@ function init() {
 
     function pacmanAteAPellet() {
         arrayOfPellets.forEach((pellet) => {
-            if (pellet.parentElement && pellet.parentElement.classList.contains('pacman')) {
+            if (pellet.parentElement && pellet.parentElement.classList.contains('pacman') || pellet.parentElement && pellet.parentElement.classList.contains('pacman-powerup') ) {
                 pellet.parentElement.removeChild(pellet)
                 pellets--;
                 score += 10;
@@ -166,7 +166,25 @@ function init() {
     }
 
     function gameComplete() {
-        alert(`You win, your score is: ${score}`)
+        alert(`You win, your score is: ${score}`);
+        resetGame();
+        grid.innerHTML = '';
+        createGrid();
+        resetPositions();
+        score = 0;
+        scoreText.textContent = `Score: ${score}`;
+        lives = 3;
+        livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
+    }
+    
+
+    function resetGame() {
+        powerPelletActive = false;
+        clearTimeout(powerPelletTimeout);
+        PacMan.poweredUp = false;
+        pellets = arrayOfPellets.length;
+        resetPositions();
+
     }
 
     function isValidMove(position) {
@@ -308,6 +326,7 @@ function init() {
         livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
         score = 0;
         powerPelletActive = false;
+        pellets = arrayOfPellets.length;
         scoreText.textContent = `Score: ${score}`;
         alert("Game over")
         resetPositions();
