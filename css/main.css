@@ -103,7 +103,13 @@ h1 {
     border-radius: 50%;
 }
 
+.pacman-powerup {
+    background-color: green;
+    border-radius: 50%;
+}
+
 .ghost {
     background-color: #FF0000;
     border-radius: 50%;
 }
+

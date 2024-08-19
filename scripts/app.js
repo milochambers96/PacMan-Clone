@@ -14,12 +14,17 @@ function init() {
     const PacMan = {
         position: 21,
         currentCell: null,
+        poweredUp: false,
         displayPacMan() {
             if (this.currentCell) {
-                this.currentCell.classList.remove('pacman');
+                this.currentCell.classList.remove('pacman', 'pacman-powerup');
             }
             this.currentCell = cells[this.position];
+            if (this.poweredUp === true) {
+                this.currentCell.classList.add('pacman-powerup')
+            } else {
             this.currentCell.classList.add('pacman');
+            }
         },
         move(newPosition) {
             if (isValidMove(newPosition)) {
@@ -88,9 +93,9 @@ function init() {
         }
     };
 
-    const ambusherGhost = {
-        position: 137,
-    }
+    // const ambusherGhost = {
+    //     position: 137,
+    // }
 
     // Create the grid and maze
     function createGrid() {
@@ -138,8 +143,9 @@ function init() {
         })
         arrayOfPowerPellets.forEach((powerPellet) => {
             if (powerPellet.parentElement && powerPellet.parentElement.classList.contains('pacman')) {
-                powerPellet.parentElement.removeChild(powerPellet)
-                powerUp()
+                powerPellet.parentElement.removeChild(powerPellet);
+                score += 50;
+                powerUp();
             }
         })
         if (pellets <= 0) {
@@ -149,25 +155,15 @@ function init() {
 
     function powerUp() {
         if (powerPelletActive) {
-
             return
-            //powerPellet.classList.add('power-pellet');
-            //cell.appendChild(powerPellet)
         }
         powerPelletActive = true;
+        PacMan.poweredUp = true;
+        setTimeout(() => {
+            powerPelletActive = false;
+            PacMan.poweredUp = false;
+        }, 10000)
     }
-
-    let powerUpInterval = setInterval(powerUp, 1000);
-
-    setTimeout(() => {
-        clearInterval(powerUpInterval)
-        powerPelletActive = false
-    }, 10000)
-
-
-    
-
-
 
     function gameComplete() {
         alert(`You win, your score is: ${score}`)
@@ -262,7 +258,6 @@ function init() {
     function checkCollision() {
         if (powerPelletActive === true && Ghost.position === PacMan.position) {
             pacManGotGhost()
-
         } else if (Ghost.position === PacMan.position) {
             ghostGotPacMan()
         }
@@ -292,9 +287,6 @@ function init() {
         }
     }
 
-
-
-
     function ghostGotPacMan() {
         if (lives === 0) {
             gameOver()
@@ -315,6 +307,7 @@ function init() {
         lives = 3;
         livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
         score = 0;
+        powerPelletActive = false;
         scoreText.textContent = `Score: ${score}`;
         alert("Game over")
         resetPositions();
