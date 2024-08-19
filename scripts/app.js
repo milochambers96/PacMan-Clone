@@ -34,6 +34,8 @@ function init() {
         }
     };
 
+    let pacManDirection = 'right'
+
     function movePacMan(event) {
         let newPosition;
         // Added to prevent window scrolling down when down/up arrow held down. 
@@ -41,24 +43,30 @@ function init() {
         event.preventDefault();
 
         switch (event.keyCode) {
-            case 37: // Left arrow
+            case 37: 
                 if (PacMan.position % width !== 0) {
                     newPosition = PacMan.position - 1;
+                    pacManDirection = 'left'
                 }
                 break;
-            case 38: // Up arrow
+            case 38: 
                 if (PacMan.position >= width) {
                     newPosition = PacMan.position - width;
+                    pacManDirection = 'up'
+
                 }
                 break;
-            case 39: // Right arrow
+            case 39: 
                 if (PacMan.position % width < width - 1) {
                     newPosition = PacMan.position + 1;
+                    pacManDirection = 'right'
+
                 }
                 break;
-            case 40: // Down arrow
+            case 40: 
                 if (PacMan.position < gridSize - width) {
                     newPosition = PacMan.position + width;
+                    pacManDirection = 'down'
                 }
                 break;
         }
@@ -69,33 +77,54 @@ function init() {
         checkCollision();
     }
 
+    function getpacManDirection() {
+        return pacManDirection;
+    }
+
 
     window.addEventListener("keydown", movePacMan);
 
 
-    // Ghost and methods
-    const Ghost = {
+    // Chaser Ghost and methods
+    const chaserGhost = {
         position: 86,
         currentCell: null,
         displayGhost() {
             if (this.currentCell) {
-                this.currentCell.classList.remove('ghost');
+                this.currentCell.classList.remove('chaser-ghost');
             }
             this.currentCell = cells[this.position];
-            this.currentCell.classList.add('ghost');
+            this.currentCell.classList.add('chaser-ghost');
         },
         move(newPosition) {
             if (isValidMove(newPosition)) {
-                this.previousMove = this.position;
+                //this.previousMove = this.position;
                 this.position = newPosition;
                 this.displayGhost();
             }
         }
     };
 
-    // const ambusherGhost = {
-    //     position: 137,
-    // }
+    const ambusherGhost = {
+        position: 287,
+        currentCell: null,
+        displayGhost() {
+            if (this.currentCell) {
+                this.currentCell.classList.remove('ambusher-ghost');
+            }
+            this.currentCell = cells[this.position];
+            this.currentCell.classList.add('ambusher-ghost');
+        },
+        move(newPosition) {
+            if (isValidMove(newPosition)) {
+                //this.previousMove = this.position;
+                this.position = newPosition;
+                this.displayGhost();
+            }
+        }
+    };
+
+
 
     // Create the grid and maze
     function createGrid() {
@@ -120,7 +149,8 @@ function init() {
             }
         }
         PacMan.displayPacMan();
-        Ghost.displayGhost();
+        chaserGhost.displayGhost();
+        ambusherGhost.displayGhost()
     }
     createGrid();
 
@@ -166,7 +196,7 @@ function init() {
     }
 
     function gameComplete() {
-        alert(`You win, your score is: ${score}`);
+        alert(`Congratulations, you beat the game, your score is: ${score}`);
         resetGame();
         grid.innerHTML = '';
         createGrid();
@@ -184,7 +214,6 @@ function init() {
         PacMan.poweredUp = false;
         pellets = arrayOfPellets.length;
         resetPositions();
-
     }
 
     function isValidMove(position) {
@@ -192,7 +221,6 @@ function init() {
         if (position < 0 || position >= gridSize) {
             return false;
         }
-
         // Check if the cell is a wall
         if (cells[position].classList.contains('wall')) {
             return false;
@@ -215,6 +243,8 @@ function init() {
         // According to MDN Set acts an object that stores unique values of any type. This is good as it stops any duplicate info being stored. Only track new cells. 
         visited.add(start)
 
+        //!if (PacMan.poweredUp === true) 
+
         while (queue.length > 0) {
             let { position, path } = queue.shift()
 
@@ -236,9 +266,9 @@ function init() {
         return [];
     }
 
-    // Move Ghost 
-    function moveGhost() {
-        const ghostPosition = Ghost.position;
+    // Move chaser Ghost 
+    function moveChaserGhost() {
+        const ghostPosition = chaserGhost.position;
         const pacmanPosition = PacMan.position;
         const path = bfs(ghostPosition, pacmanPosition)
         //console.log('The path is:' + path)
@@ -265,23 +295,88 @@ function init() {
             const newPosition = ghostPosition + move;
 
             if (isValidMove(newPosition)) {
-                Ghost.move(newPosition)
+                chaserGhost.move(newPosition)
                 checkCollision()
             }
         }
     }
 
-    setInterval(moveGhost, 500);
+    
+
+    setInterval(moveChaserGhost, 500);
+
+    function getAmbushPosition(pacmanPosition, pacmanDirection) {
+        let targetPosition;
+        const targetOffset = 4;
+        switch (pacmanDirection) {
+            case 'up':
+                targetPosition = pacmanPosition - targetOffset * width;
+                break;
+            case 'down':
+                targetPosition = pacmanPosition + targetOffset * width;
+                break;
+            case 'left':
+                targetPosition = pacmanPosition - targetOffset;
+                break;
+            case 'right':
+                targetPosition = pacmanPosition + targetOffset;
+                break;
+            default: 
+                targetPosition = pacmanPosition;
+        }
+        if (!isValidMove(targetPosition)) {
+            targetPosition = pacManPosition; 
+        }
+        return targetPosition;
+    }
+
+    function moveAmbusherGhost() {
+        const pacmanPosition = PacMan.position;
+        const pacmanDirection = getpacManDirection();
+        const ambushPosition =  getAmbushPosition(pacmanPosition, pacmanDirection);
+        const ambushRoute = bfs(ambusherGhost.position, ambushPosition);
+        if (ambushRoute.length > 0) {
+            const nextMove = ambushRoute[0];
+            let move;
+            switch (nextMove) {
+                case 'up':
+                    move = -width;
+                    break;
+                case 'down':
+                    move = width;
+                    break;
+                case 'left':
+                    move = -1;
+                    break;
+                case 'right':
+                    move = 1;
+                    break;
+            }
+            const newPosition = ambusherGhost.position + move;
+            if (isValidMove(newPosition)) {
+                ambusherGhost.move(newPosition);
+                checkCollision();
+            }
+        }
+    }
+
+    setInterval(moveAmbusherGhost, 200)
+
+
+
+
+
 
     function checkCollision() {
-        if (powerPelletActive === true && Ghost.position === PacMan.position) {
-            pacManGotGhost()
-        } else if (Ghost.position === PacMan.position) {
+        if (powerPelletActive === true && (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position)) {
+            pacManAteGhost()
+        } else if (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position) {
+            score -= 500;
             ghostGotPacMan()
         }
     }
 
-    function pacManGotGhost() {
+    function pacManAteGhost() {
         score += 250;
         resetEatenGhosts()
     }
@@ -300,8 +395,8 @@ function init() {
             }
         }
         if (bestPosition !== -1) {
-            Ghost.position = bestPosition;
-            Ghost.displayGhost()
+            chaserGhost.position = bestPosition;
+            chaserGhost.displayGhost()
         }
     }
 
@@ -328,15 +423,15 @@ function init() {
         powerPelletActive = false;
         pellets = arrayOfPellets.length;
         scoreText.textContent = `Score: ${score}`;
-        alert("Game over")
+        alert("Oh no, the ghosts got you! Game over!")
         resetPositions();
     }
 
     function resetPositions() {
         PacMan.position = 21;
-        Ghost.position = 86;
+        chaserGhost.position = 86;
         PacMan.displayPacMan();
-        Ghost.displayGhost();
+        chaserGhost.displayGhost();
     }
 }
 
