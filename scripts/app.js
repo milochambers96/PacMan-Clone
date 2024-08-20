@@ -103,7 +103,7 @@ function isValidMove(position) {
     return true;
 }
 
-        //! BFS - Breadth First Search is the pathfinding algorithm to help the ghosts ensure the ghost is finding a path to pacman rather than tracking the distance.
+        //! BFS - Breadth First Search is the pathfinding algorithm to help the ghosts ensure they are finding the fastest path to a destination rather than tracking the distance.
 function bfs(start, destination) {
     const directions = [
         { move: width, direction: 'down' },
@@ -336,14 +336,19 @@ function init() {
         const pacmanPosition = PacMan.position;
         const pacmanDirection = getpacManDirection();
         const ambushPosition =  getAmbushPosition(pacmanPosition, pacmanDirection);
-        const ambushRoute = bfs(ambusherGhost.position, ambushPosition);
         const distanceFromPacMan = manhattanDistance(pacmanPosition, ambusherGhost.position)
+        let targetPosition;
 
         if (distanceFromPacMan <= 4) {
-            springAmbush();
-            return
-        } else if (ambushRoute.length > 0) {
-            const nextMove = ambushRoute[0];
+            targetPosition = pacmanPosition;
+        } else {
+            targetPosition = ambushPosition
+        } 
+        
+        const route = bfs(ambusherGhost.position, targetPosition);
+
+        if (route.length > 0) {
+            const nextMove = route[0];
             let move;
             switch (nextMove) {
                 case 'up':
@@ -367,38 +372,8 @@ function init() {
         }
     }
 
-    function springAmbush() {
-        const ambushRoute = bfs(ambusherGhost.position, PacMan.position)
-        if (ambushRoute.length > 0) {
-            const nextMove = ambushRoute[0];
-            //console.log(nextMove)
-            let move;
-            switch (nextMove) {
-                case 'up':
-                    move = -width;
-                    break;
-                case 'down':
-                    move = width;
-                    break;
-                case 'left':
-                    move = -1;
-                    break;
-                case 'right':
-                    move = 1;
-                    break;
-            }
-            const newPosition = ambusherGhost.position + move;
-            if (isValidMove(newPosition)) {
-                ambusherGhost.move(newPosition)
-                checkCollision()
-            }
-        }
-    }
-        
-
-
-   const chaserGhostInterval = setInterval(moveChaserGhost, 500);
-   const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500)
+   //const chaserGhostInterval = setInterval(moveChaserGhost, 500);
+  // const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500)
 
     function checkCollision() {
         if (powerPelletActive === true && (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position)) {
