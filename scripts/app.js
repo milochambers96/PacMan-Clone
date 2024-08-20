@@ -40,7 +40,7 @@ const PacMan = {
         if (this.poweredUp === true) {
             this.currentCell.classList.add('pacman-powerup')
         } else {
-        this.currentCell.classList.add('pacman');
+            this.currentCell.classList.add('pacman');
         }
     },
     move(newPosition) {
@@ -119,7 +119,7 @@ function isValidMove(position) {
     return true;
 }
 
-        //! BFS - Breadth First Search is the pathfinding algorithm to help the ghosts ensure they are finding the fastest path to a destination rather than tracking the distance.
+//! BFS - Breadth First Search is the pathfinding algorithm to help the ghosts ensure they are finding the fastest path to a destination rather than tracking the distance.
 function bfs(start, destination) {
     const directions = [
         { move: width, direction: 'down' },
@@ -169,16 +169,16 @@ function getAmbushPosition(pacmanPosition, pacmanDirection) {
         case 'right':
             targetPosition = pacmanPosition + targetOffset;
             break;
-        default: 
+        default:
             targetPosition = pacmanPosition;
     }
     if (!isValidMove(targetPosition)) {
-        targetPosition = pacManPosition; 
+        targetPosition = pacManPosition;
     }
     return targetPosition;
 }
 
-function manhattanDistance(pos1, pos2) { 
+function manhattanDistance(pos1, pos2) {
     const pos1Row = Math.floor(pos1 / width);
     const pos1Col = pos1 % width;
     const pos2Row = Math.floor(pos2 / width);
@@ -191,7 +191,7 @@ function init() {
     const grid = document.querySelector('#grid');
     const scoreText = document.querySelector('#score');
     const livesText = document.querySelector('#lives');
-    
+
     let lives = 3;
     let score = 0;
 
@@ -227,29 +227,29 @@ function init() {
     let pacManDirection = 'right'
 
     function movePacMan(event) {
-        let newPosition;     
+        let newPosition;
         event.preventDefault();
         // Added to prevent window scrolling if the player holds down the down or up arrows.
         switch (event.keyCode) {
-            case 37: 
+            case 37:
                 if (PacMan.position % width !== 0) {
                     newPosition = PacMan.position - 1;
                     pacManDirection = 'left';
                 }
                 break;
-            case 38: 
+            case 38:
                 if (PacMan.position >= width) {
                     newPosition = PacMan.position - width;
                     pacManDirection = 'up';
                 }
                 break;
-            case 39: 
+            case 39:
                 if (PacMan.position % width < width - 1) {
                     newPosition = PacMan.position + 1;
                     pacManDirection = 'right';
                 }
                 break;
-            case 40: 
+            case 40:
                 if (PacMan.position < gridSize - width) {
                     newPosition = PacMan.position + width;
                     pacManDirection = 'down';
@@ -265,7 +265,7 @@ function init() {
 
     window.addEventListener("keydown", movePacMan);
 
-    
+
     // Code relating to pellets & power pellets.
     const arrayOfPellets = Array.from(document.querySelectorAll('.pellet'));
     const arrayOfPowerPellets = Array.from(document.querySelectorAll('.power-pellet'));
@@ -311,7 +311,7 @@ function init() {
         let fullReset = true;
         resetGame(fullReset);
     }
-       
+
     // Move chaser Ghost 
     function moveChaserGhost() {
         const ghostPosition = chaserGhost.position;
@@ -352,7 +352,7 @@ function init() {
     function moveAmbusherGhost() {
         const pacmanPosition = PacMan.position;
         const pacmanDirection = getpacManDirection();
-        const ambushPosition =  getAmbushPosition(pacmanPosition, pacmanDirection);
+        const ambushPosition = getAmbushPosition(pacmanPosition, pacmanDirection);
         const distanceFromPacMan = manhattanDistance(pacmanPosition, ambusherGhost.position)
         let targetPosition;
 
@@ -360,7 +360,7 @@ function init() {
             targetPosition = pacmanPosition;
         } else {
             targetPosition = ambushPosition
-        } 
+        }
 
         const route = bfs(ambusherGhost.position, targetPosition);
 
@@ -391,47 +391,58 @@ function init() {
 
     function moveRandomGhost() {
         randomPosition = Math.floor(Math.random() * cells.length);
-        if(isValidMove(randomPosition)) {
+        if (isValidMove(randomPosition)) {
             randomGhost.move(randomPosition);
             checkCollision()
         }
     }
 
-    //const chaserGhostInterval = setInterval(moveChaserGhost, 500);
-    //const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500);
+    const chaserGhostInterval = setInterval(moveChaserGhost, 500);
+    const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500);
     const randomGhostInterval = setInterval(moveRandomGhost, 2000);
 
     function checkCollision() {
-        if (powerPelletActive === true && (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position || randomGhost.position === PacMan.position )) {
-            pacManAteGhost()
-        } else if (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position || randomGhost.position === PacMan.position ) {
-            ghostGotPacMan()
-        }
-    }
-
-    function pacManAteGhost() {
-        score += 250;
-        resetEatenGhosts()
-    }
-
-    function resetEatenGhosts()  { 
-        const collisionPoint = PacMan.position
-        let maxDistance = -1;
-        let bestPosition = -1;
-        for (let i = 0; i < cells.length; i++) {
-            if (!cells[i].classList.contains('wall')) {
-                distance = Math.abs(i - collisionPoint);
-                if (distance > maxDistance) {
-                    maxDistance = distance;
-                    bestPosition = i
-                }
+        if (powerPelletActive) {
+            if (chaserGhost.position === PacMan.position) {
+                pacManAteGhost('chaser');
+            } else if (ambusherGhost.position === PacMan.position) {
+                pacManAteGhost('ambusher');
+            } else if (randomGhost.position === PacMan.position) {
+                pacManAteGhost('random');
             }
-        }
-        if (bestPosition !== -1) {
-            chaserGhost.position = bestPosition;
-            chaserGhost.displayGhost()
+        } else if (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position || randomGhost.position === PacMan.position) {
+            ghostGotPacMan();
         }
     }
+
+    function pacManAteGhost(eatenGhost) {
+        score += 250;
+        resetEatenGhost(eatenGhost)
+    }
+
+    const innerSquare = {
+        chaser: 189,
+        ambusher: 199,
+        random: 210
+    };
+
+    function resetEatenGhost(ghost) {
+        switch (ghost) {
+            case 'chaser':
+                chaserGhost.position = innerSquare.chaser;
+                chaserGhost.displayGhost();
+                break;
+            case 'ambusher':
+                ambusherGhost.position = innerSquare.ambusher;
+                ambusherGhost.displayGhost();
+                break;
+            case 'random':
+                randomGhost.position = innerSquare.random;
+                randomGhost.displayGhost();
+                break;
+        }
+    }
+
 
     function ghostGotPacMan() {
         score -= 500;

@@ -86,7 +86,7 @@ h2 {
 .pellet {
     width: 25%;
     height: 25%;
-    background-color: #00CED1;
+    background-color: #f0f7f7;
     border-radius: 50%;
     position: absolute;
     top: 50%;
@@ -97,8 +97,7 @@ h2 {
 .power-pellet {
     width: 40%;
     height: 40%;
-    background-color: #FFA500;
-    border-radius: 50%;
+    background-color: #00CED1;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -119,7 +118,7 @@ h2 {
 }
 
 .pacman-powerup {
-    background-color: #00FFFF;
+    background-color: #e5efef;
     border-radius: 50%;
 }
 
@@ -129,7 +128,7 @@ h2 {
 }
 
 .ambusher-ghost {
-    background-color: magenta;
+    background-color: rgb(251, 9, 251);
     border-radius: 50%;
 }
 
