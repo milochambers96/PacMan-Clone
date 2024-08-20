@@ -63,7 +63,6 @@ const chaserGhost = {
     },
     move(newPosition) {
         if (isValidMove(newPosition)) {
-            //this.previousMove = this.position;
             this.position = newPosition;
             this.displayGhost();
         }
@@ -82,7 +81,24 @@ const ambusherGhost = {
     },
     move(newPosition) {
         if (isValidMove(newPosition)) {
-            //this.previousMove = this.position;
+            this.position = newPosition;
+            this.displayGhost();
+        }
+    }
+};
+
+const randomGhost = {
+    position: 301,
+    currentCell: null,
+    displayGhost() {
+        if (this.currentCell) {
+            this.currentCell.classList.remove('random-ghost');
+        }
+        this.currentCell = cells[this.position];
+        this.currentCell.classList.add('random-ghost');
+    },
+    move(newPosition) {
+        if (isValidMove(newPosition)) {
             this.position = newPosition;
             this.displayGhost();
         }
@@ -201,7 +217,8 @@ function init() {
         }
         PacMan.displayPacMan();
         chaserGhost.displayGhost();
-        ambusherGhost.displayGhost()
+        ambusherGhost.displayGhost();
+        randomGhost.displayGhost();
     }
     createGrid();
 
@@ -344,7 +361,7 @@ function init() {
         } else {
             targetPosition = ambushPosition
         } 
-        
+
         const route = bfs(ambusherGhost.position, targetPosition);
 
         if (route.length > 0) {
@@ -372,13 +389,22 @@ function init() {
         }
     }
 
-   //const chaserGhostInterval = setInterval(moveChaserGhost, 500);
-  // const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500)
+    function moveRandomGhost() {
+        randomPosition = Math.floor(Math.random() * cells.length);
+        if(isValidMove(randomPosition)) {
+            randomGhost.move(randomPosition);
+            checkCollision()
+        }
+    }
+
+    //const chaserGhostInterval = setInterval(moveChaserGhost, 500);
+    //const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500);
+    const randomGhostInterval = setInterval(moveRandomGhost, 2000);
 
     function checkCollision() {
-        if (powerPelletActive === true && (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position)) {
+        if (powerPelletActive === true && (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position || randomGhost.position === PacMan.position )) {
             pacManAteGhost()
-        } else if (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position) {
+        } else if (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position || randomGhost.position === PacMan.position ) {
             ghostGotPacMan()
         }
     }
