@@ -282,25 +282,11 @@ function init() {
     }
 
     function gameComplete() {
-        alert(`Congratulations, you beat the game, your score is: ${score}`);
-        resetGame();
-        grid.innerHTML = '';
-        createGrid();
-        resetPositions();
-        score = 0;
-        scoreText.textContent = `Score: ${score}`;
-        lives = 3;
-        livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
+        alert(`Congratulations, you beat the game! Your final score is: ${score}`);
+        let fullReset = true;
+        resetGame(fullReset)
     }
-
-    function resetGame() {
-        powerPelletActive = false;
-        clearTimeout(powerPelletTimeout);
-        PacMan.poweredUp = false;
-        pellets = arrayOfPellets.length;
-        resetPositions();
-    }
-
+       
     // Move chaser Ghost 
     function moveChaserGhost() {
         const ghostPosition = chaserGhost.position;
@@ -327,7 +313,6 @@ function init() {
                     break;
             }
             const newPosition = ghostPosition + move;
-
             if (isValidMove(newPosition)) {
                 chaserGhost.move(newPosition)
                 checkCollision()
@@ -405,41 +390,48 @@ function init() {
     }
 
     function ghostGotPacMan() {
+        score -= 500;
+        scoreText.textContent = `Score: ${score}`
         if (lives === 0) {
-            score -= 500;
-            scoreText.textContent = `Score: ${score}`
             gameOver();
             return
         }
         if (lives === 1) {
-            score -= 500;
-            scoreText.textContent = `Score: ${score}`
             livesText.textContent = 'Final Life';
             lives--;
             resetPositions();
             return;
         }
-        score -= 500;
-        scoreText.textContent = `Score: ${score}`;
         lives--;
         livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
         resetPositions();
     }
 
     function gameOver() {
-        lives = 3;
-        livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
-        score = 0;
+        alert(`Oh no, the ghosts got you! Game over! Your final score is: ${score}`)
+        let fullReset = true;
+        resetGame(fullReset);
+    }
+
+    function resetGame() {
         powerPelletActive = false;
-        pellets = arrayOfPellets.length;
+        clearTimeout(powerPelletTimeout);
+        clearInterval(ambusherGhostInterval);
+        clearInterval(chaserGhostInterval);
+        score = 0;
         scoreText.textContent = `Score: ${score}`;
-        alert("Oh no, the ghosts got you! Game over!")
+        lives = 3;
+        livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`
+        grid.innerHTML = ''
+        cells.length = 0;
+        createGrid();
         resetPositions();
     }
 
     function resetPositions() {
         PacMan.position = 21;
         chaserGhost.position = 86;
+        ambusherGhost.position = 287
         PacMan.displayPacMan();
         chaserGhost.displayGhost();
         ambusherGhost.displayGhost();
@@ -447,5 +439,7 @@ function init() {
 }
 
 window.addEventListener("DOMContentLoaded", init);
+
+
 
 
