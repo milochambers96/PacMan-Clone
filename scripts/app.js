@@ -52,8 +52,9 @@ const PacMan = {
 };
 
 const chaserGhost = {
-    position: 86,
+    position: 68,
     currentCell: null,
+    pathHistory: [],
     displayGhost() {
         if (this.currentCell) {
             this.currentCell.classList.remove('chaser-ghost');
@@ -63,8 +64,15 @@ const chaserGhost = {
     },
     move(newPosition) {
         if (isValidMove(newPosition)) {
+            this.pathHistory.push(this.position)
             this.position = newPosition;
             this.displayGhost();
+        }
+    },
+    retracePath() {
+        if (this.pathHistory.length > 0) {
+            this.position = this.pathHistory.pop();
+            this.displayGhost()
         }
     }
 };
@@ -72,6 +80,7 @@ const chaserGhost = {
 const ambusherGhost = {
     position: 287,
     currentCell: null,
+    pathHistory: [],
     displayGhost() {
         if (this.currentCell) {
             this.currentCell.classList.remove('ambusher-ghost');
@@ -81,8 +90,15 @@ const ambusherGhost = {
     },
     move(newPosition) {
         if (isValidMove(newPosition)) {
+            this.pathHistory.push(this.position)
             this.position = newPosition;
             this.displayGhost();
+        }
+    },
+    retracePath() {
+        if (this.pathHistory.length > 0) {
+            this.position = this.pathHistory.pop();
+            this.displayGhost()
         }
     }
 };
@@ -316,31 +332,35 @@ function init() {
     function moveChaserGhost() {
         const ghostPosition = chaserGhost.position;
         const pacmanPosition = PacMan.position;
-        const chasePath = bfs(ghostPosition, pacmanPosition)
-        //console.log('The path is:' + path)
+        if (PacMan.poweredUp) {
+            chaserGhost.retracePath();
+        } else {
+            const chasePath = bfs(ghostPosition, pacmanPosition)
+            //console.log('The path is:' + path)
 
-        if (chasePath.length > 0) {
-            const nextMove = chasePath[0];
-            //console.log(nextMove)
-            let move;
-            switch (nextMove) {
-                case 'up':
-                    move = -width;
-                    break;
-                case 'down':
-                    move = width;
-                    break;
-                case 'left':
-                    move = -1;
-                    break;
-                case 'right':
-                    move = 1;
-                    break;
-            }
-            const newPosition = ghostPosition + move;
-            if (isValidMove(newPosition)) {
-                chaserGhost.move(newPosition)
-                checkCollision()
+            if (chasePath.length > 0) {
+                const nextMove = chasePath[0];
+                //console.log(nextMove)
+                let move;
+                switch (nextMove) {
+                    case 'up':
+                        move = -width;
+                        break;
+                    case 'down':
+                        move = width;
+                        break;
+                    case 'left':
+                        move = -1;
+                        break;
+                    case 'right':
+                        move = 1;
+                        break;
+                }
+                const newPosition = ghostPosition + move;
+                if (isValidMove(newPosition)) {
+                    chaserGhost.move(newPosition)
+                    checkCollision()
+                }
             }
         }
     }
@@ -356,6 +376,11 @@ function init() {
         const distanceFromPacMan = manhattanDistance(pacmanPosition, ambusherGhost.position)
         let targetPosition;
 
+        if (PacMan.poweredUp) {
+            ambusherGhost.retracePath();
+            return;
+        }
+        
         if (distanceFromPacMan <= 4) {
             targetPosition = pacmanPosition;
         } else {
@@ -388,6 +413,15 @@ function init() {
             }
         }
     }
+
+    // function reverseDirection(direction) {
+    //     switch (direction) {
+    //         case 'up': return 'down';
+    //         case 'down': return 'up';
+    //         case 'left': return 'right';
+    //         case 'right': return 'left';
+    //     }
+    // }
 
     function moveRandomGhost() {
         randomPosition = Math.floor(Math.random() * cells.length);
@@ -463,7 +497,7 @@ function init() {
     }
 
     function gameOver() {
-        alert(`Oh no, the ghosts got you! Game over! Your final score is: ${score}`)
+        alert(`Oh no, the ghosts got you! Game over! Your final score is: ${score}.`)
         let fullReset = true;
         resetGame(fullReset);
     }
@@ -473,6 +507,8 @@ function init() {
         clearTimeout(powerPelletTimeout);
         clearInterval(ambusherGhostInterval);
         clearInterval(chaserGhostInterval);
+        clearInterval(randomGhostInterval);
+        window.removeEventListener("keydown", movePacMan)
         score = 0;
         scoreText.textContent = `Score: ${score}`;
         lives = 3;
@@ -485,7 +521,7 @@ function init() {
 
     function resetPositions() {
         PacMan.position = 21;
-        chaserGhost.position = 86;
+        chaserGhost.position = 68;
         ambusherGhost.position = 287
         PacMan.displayPacMan();
         chaserGhost.displayGhost();
