@@ -135,7 +135,7 @@ function bfs(start, destination) {
     return [];
 }
 
-//! Helper function to calculate ambush site depending on PacMan direction. 
+//! Helper functions to calculate ambush site depending on PacMan direction. 
 
 function getAmbushPosition(pacmanPosition, pacmanDirection) {
     let targetPosition;
@@ -160,6 +160,14 @@ function getAmbushPosition(pacmanPosition, pacmanDirection) {
         targetPosition = pacManPosition; 
     }
     return targetPosition;
+}
+
+function manhattanDistance(pos1, pos2) { 
+    const pos1Row = Math.floor(pos1 / width);
+    const pos1Col = pos1 % width;
+    const pos2Row = Math.floor(pos2 / width);
+    const pos2Col = pos2 % width;
+    return Math.abs(pos1Row - pos2Row) + Math.abs(pos1Col - pos2Col)
 }
 
 
@@ -329,6 +337,12 @@ function init() {
         const pacmanDirection = getpacManDirection();
         const ambushPosition =  getAmbushPosition(pacmanPosition, pacmanDirection);
         const ambushRoute = bfs(ambusherGhost.position, ambushPosition);
+        const distanceFromPacMan = manhattanDistance(pacmanPosition, ambusherGhost.position)
+
+        // if (distanceFromPacMan <= 4) {
+        //     springAmbush();
+        // //     return
+        // } else 
         if (ambushRoute.length > 0) {
             const nextMove = ambushRoute[0];
             let move;
