@@ -1,47 +1,210 @@
+// Code relating to grid/maze 
+const height = 20;
+const width = 20;
+const gridSize = width * height;
+const cells = []
+
+const mazeLayout = [
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+    1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
+    1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 2, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+    1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
+    1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+];
+
+//Code relating to characters - PacMan and Ghosts
+const PacMan = {
+    position: 21,
+    currentCell: null,
+    poweredUp: false,
+    displayPacMan() {
+        if (this.currentCell) {
+            this.currentCell.classList.remove('pacman', 'pacman-powerup');
+        }
+        this.currentCell = cells[this.position];
+        if (this.poweredUp === true) {
+            this.currentCell.classList.add('pacman-powerup')
+        } else {
+        this.currentCell.classList.add('pacman');
+        }
+    },
+    move(newPosition) {
+        if (isValidMove(newPosition)) {
+            this.position = newPosition;
+            this.displayPacMan();
+        }
+    }
+};
+
+const chaserGhost = {
+    position: 86,
+    currentCell: null,
+    displayGhost() {
+        if (this.currentCell) {
+            this.currentCell.classList.remove('chaser-ghost');
+        }
+        this.currentCell = cells[this.position];
+        this.currentCell.classList.add('chaser-ghost');
+    },
+    move(newPosition) {
+        if (isValidMove(newPosition)) {
+            //this.previousMove = this.position;
+            this.position = newPosition;
+            this.displayGhost();
+        }
+    }
+};
+
+const ambusherGhost = {
+    position: 287,
+    currentCell: null,
+    displayGhost() {
+        if (this.currentCell) {
+            this.currentCell.classList.remove('ambusher-ghost');
+        }
+        this.currentCell = cells[this.position];
+        this.currentCell.classList.add('ambusher-ghost');
+    },
+    move(newPosition) {
+        if (isValidMove(newPosition)) {
+            //this.previousMove = this.position;
+            this.position = newPosition;
+            this.displayGhost();
+        }
+    }
+};
+
+// Helper Functions that Game Events use
+
+function isValidMove(position) {
+    // Check if position is within the grid boundaries
+    if (position < 0 || position >= gridSize) {
+        return false;
+    }
+    // Check if the cell is a wall
+    if (cells[position].classList.contains('wall')) {
+        return false;
+    }
+    return true;
+}
+
+        //! BFS - Breadth First Search is the pathfinding algorithm to help the ghosts ensure the ghost is finding a path to pacman rather than tracking the distance.
+function bfs(start, destination) {
+    const directions = [
+        { move: width, direction: 'down' },
+        { move: -width, direction: 'up' },
+        { move: 1, direction: 'right' },
+        { move: -1, direction: 'left' }
+    ];
+
+    const queue = [{ position: (start), path: [] }];
+    let visited = new Set()
+    // Set acts an object that stores unique values of any type. This is good as it stops any duplicate info being stored. Only track new cells. 
+    visited.add(start)
+    //!if (PacMan.poweredUp === true) 
+    while (queue.length > 0) {
+        let { position, path } = queue.shift()
+        if (position === destination) {
+            return path;
+        }
+        for (const { move, direction } of directions) {
+            const newPosition = position + move;
+            // has is a method for Sets - returns boolean whether an element with the specifed value exists. 
+            // Checking that the visted set does not contain the new position
+            if (isValidMove(newPosition) && !visited.has(newPosition)) {
+                visited.add(newPosition);
+                queue.push({ position: newPosition, path: [...path, direction] })
+            }
+        }
+    }
+    return [];
+}
+
+//! Helper function to calculate ambush site depending on PacMan direction. 
+
+function getAmbushPosition(pacmanPosition, pacmanDirection) {
+    let targetPosition;
+    const targetOffset = 4;
+    switch (pacmanDirection) {
+        case 'up':
+            targetPosition = pacmanPosition - targetOffset * width;
+            break;
+        case 'down':
+            targetPosition = pacmanPosition + targetOffset * width;
+            break;
+        case 'left':
+            targetPosition = pacmanPosition - targetOffset;
+            break;
+        case 'right':
+            targetPosition = pacmanPosition + targetOffset;
+            break;
+        default: 
+            targetPosition = pacmanPosition;
+    }
+    if (!isValidMove(targetPosition)) {
+        targetPosition = pacManPosition; 
+    }
+    return targetPosition;
+}
+
+
 function init() {
     const grid = document.querySelector('#grid');
     const scoreText = document.querySelector('#score');
     const livesText = document.querySelector('#lives');
+    
     let lives = 3;
     let score = 0;
 
-    const height = 20;
-    const width = 20;
-    const gridSize = width * height;
-    const cells = [];
-
-    // Pac-Man and methods
-    const PacMan = {
-        position: 21,
-        currentCell: null,
-        poweredUp: false,
-        displayPacMan() {
-            if (this.currentCell) {
-                this.currentCell.classList.remove('pacman', 'pacman-powerup');
-            }
-            this.currentCell = cells[this.position];
-            if (this.poweredUp === true) {
-                this.currentCell.classList.add('pacman-powerup')
+    function createGrid() {
+        for (let i = 0; i < gridSize; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            grid.appendChild(cell);
+            cells.push(cell);
+            if (mazeLayout[i] === 1) {
+                cell.classList.add('wall');
+            } else if (mazeLayout[i] === 2) {
+                cell.classList.add('path');
+                const powerPellet = document.createElement('div');
+                powerPellet.classList.add('power-pellet');
+                cell.appendChild(powerPellet)
             } else {
-            this.currentCell.classList.add('pacman');
-            }
-        },
-        move(newPosition) {
-            if (isValidMove(newPosition)) {
-                this.position = newPosition;
-                this.displayPacMan();
+                cell.classList.add('path')
+                const pellet = document.createElement('div');
+                pellet.classList.add('pellet');
+                cell.appendChild(pellet);
             }
         }
-    };
+        PacMan.displayPacMan();
+        chaserGhost.displayGhost();
+        ambusherGhost.displayGhost()
+    }
+    createGrid();
+
+    // In Game Code relating to PacMan
 
     let pacManDirection = 'right'
 
     function movePacMan(event) {
-        let newPosition;
-        // Added to prevent window scrolling down when down/up arrow held down. 
-        // Holding down kind of breaks the game. 
+        let newPosition;     
         event.preventDefault();
-
+        // Added to prevent window scrolling if the player holds down the down or up arrows.
         switch (event.keyCode) {
             case 37: 
                 if (PacMan.position % width !== 0) {
@@ -53,14 +216,12 @@ function init() {
                 if (PacMan.position >= width) {
                     newPosition = PacMan.position - width;
                     pacManDirection = 'up'
-
                 }
                 break;
             case 39: 
                 if (PacMan.position % width < width - 1) {
                     newPosition = PacMan.position + 1;
                     pacManDirection = 'right'
-
                 }
                 break;
             case 40: 
@@ -77,94 +238,19 @@ function init() {
         checkCollision();
     }
 
-    function getpacManDirection() {
-        return pacManDirection;
-    }
-
-
     window.addEventListener("keydown", movePacMan);
 
-
-    // Chaser Ghost and methods
-    const chaserGhost = {
-        position: 86,
-        currentCell: null,
-        displayGhost() {
-            if (this.currentCell) {
-                this.currentCell.classList.remove('chaser-ghost');
-            }
-            this.currentCell = cells[this.position];
-            this.currentCell.classList.add('chaser-ghost');
-        },
-        move(newPosition) {
-            if (isValidMove(newPosition)) {
-                //this.previousMove = this.position;
-                this.position = newPosition;
-                this.displayGhost();
-            }
-        }
-    };
-
-    const ambusherGhost = {
-        position: 287,
-        currentCell: null,
-        displayGhost() {
-            if (this.currentCell) {
-                this.currentCell.classList.remove('ambusher-ghost');
-            }
-            this.currentCell = cells[this.position];
-            this.currentCell.classList.add('ambusher-ghost');
-        },
-        move(newPosition) {
-            if (isValidMove(newPosition)) {
-                //this.previousMove = this.position;
-                this.position = newPosition;
-                this.displayGhost();
-            }
-        }
-    };
-
-
-
-    // Create the grid and maze
-    function createGrid() {
-        for (let i = 0; i < gridSize; i++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            grid.appendChild(cell);
-            cells.push(cell);
-            if (mazeLayout[i] === 1) {
-                cell.classList.add('wall');
-            } else if (mazeLayout[i] === 2) {
-                cell.classList.add('path');
-                const powerPellet = document.createElement('div');
-                powerPellet.classList.add('power-pellet');
-                cell.appendChild(powerPellet)
-            } else {
-                cell.classList.add('path')
-                //cell.classList.add('pellet');
-                const pellet = document.createElement('div');
-                pellet.classList.add('pellet');
-                cell.appendChild(pellet);
-            }
-        }
-        PacMan.displayPacMan();
-        chaserGhost.displayGhost();
-        ambusherGhost.displayGhost()
-    }
-    createGrid();
-
-    //code relating to pellets.
+    
+    // Code relating to pellets & power pellets.
     const arrayOfPellets = Array.from(document.querySelectorAll('.pellet'));
     const arrayOfPowerPellets = Array.from(document.querySelectorAll('.power-pellet'));
     let pellets = arrayOfPellets.length;
-    //let powerPellets = arrayofPellets.length;
     let powerPelletActive = false;
     let powerPelletTimeout;
 
     function pacmanAteAPellet() {
         arrayOfPellets.forEach((pellet) => {
-            if (pellet.parentElement && pellet.parentElement.classList.contains('pacman') || pellet.parentElement && pellet.parentElement.classList.contains('pacman-powerup') ) {
+            if (pellet.parentElement && (pellet.parentElement.classList.contains('pacman') || pellet.parentElement.classList.contains('pacman-powerup'))) {
                 pellet.parentElement.removeChild(pellet)
                 pellets--;
                 score += 10;
@@ -206,7 +292,6 @@ function init() {
         lives = 3;
         livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
     }
-    
 
     function resetGame() {
         powerPelletActive = false;
@@ -216,67 +301,16 @@ function init() {
         resetPositions();
     }
 
-    function isValidMove(position) {
-        // Check if position is within the grid boundaries
-        if (position < 0 || position >= gridSize) {
-            return false;
-        }
-        // Check if the cell is a wall
-        if (cells[position].classList.contains('wall')) {
-            return false;
-        }
-        return true;
-    }
-
-
-
-    function bfs(start, destination) {
-        const directions = [
-            { move: width, direction: 'down' },
-            { move: -width, direction: 'up' },
-            { move: 1, direction: 'right' },
-            { move: -1, direction: 'left' }
-        ];
-
-        const queue = [{ position: (start), path: [] }];
-        let visited = new Set()
-        // According to MDN Set acts an object that stores unique values of any type. This is good as it stops any duplicate info being stored. Only track new cells. 
-        visited.add(start)
-
-        //!if (PacMan.poweredUp === true) 
-
-        while (queue.length > 0) {
-            let { position, path } = queue.shift()
-
-            if (position === destination) {
-                return path;
-            }
-
-            for (const { move, direction } of directions) {
-                const newPosition = position + move;
-                // has is a method for Sets - returns boolean whether an element with the specifed value exists. 
-                // Checking that the visted set does not contain the new position
-                if (isValidMove(newPosition) && !visited.has(newPosition)) {
-                    visited.add(newPosition);
-                    queue.push({ position: newPosition, path: [...path, direction] })
-                }
-            }
-        }
-
-        return [];
-    }
-
     // Move chaser Ghost 
     function moveChaserGhost() {
         const ghostPosition = chaserGhost.position;
         const pacmanPosition = PacMan.position;
-        const path = bfs(ghostPosition, pacmanPosition)
+        const chasePath = bfs(ghostPosition, pacmanPosition)
         //console.log('The path is:' + path)
 
-        if (path.length > 0) {
-            const nextMove = path[0];
+        if (chasePath.length > 0) {
+            const nextMove = chasePath[0];
             //console.log(nextMove)
-
             let move;
             switch (nextMove) {
                 case 'up':
@@ -301,33 +335,8 @@ function init() {
         }
     }
 
-    
-
-    setInterval(moveChaserGhost, 500);
-
-    function getAmbushPosition(pacmanPosition, pacmanDirection) {
-        let targetPosition;
-        const targetOffset = 4;
-        switch (pacmanDirection) {
-            case 'up':
-                targetPosition = pacmanPosition - targetOffset * width;
-                break;
-            case 'down':
-                targetPosition = pacmanPosition + targetOffset * width;
-                break;
-            case 'left':
-                targetPosition = pacmanPosition - targetOffset;
-                break;
-            case 'right':
-                targetPosition = pacmanPosition + targetOffset;
-                break;
-            default: 
-                targetPosition = pacmanPosition;
-        }
-        if (!isValidMove(targetPosition)) {
-            targetPosition = pacManPosition; 
-        }
-        return targetPosition;
+    function getpacManDirection() {
+        return pacManDirection;
     }
 
     function moveAmbusherGhost() {
@@ -360,18 +369,13 @@ function init() {
         }
     }
 
-    setInterval(moveAmbusherGhost, 200)
-
-
-
-
-
+   const chaserGhostInterval = setInterval(moveChaserGhost, 500);
+   const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500)
 
     function checkCollision() {
         if (powerPelletActive === true && (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position)) {
             pacManAteGhost()
         } else if (chaserGhost.position === PacMan.position || ambusherGhost.position === PacMan.position) {
-            score -= 500;
             ghostGotPacMan()
         }
     }
@@ -402,15 +406,21 @@ function init() {
 
     function ghostGotPacMan() {
         if (lives === 0) {
-            gameOver()
+            score -= 500;
+            scoreText.textContent = `Score: ${score}`
+            gameOver();
             return
         }
         if (lives === 1) {
+            score -= 500;
+            scoreText.textContent = `Score: ${score}`
             livesText.textContent = 'Final Life';
-            lives--
+            lives--;
             resetPositions();
             return;
         }
+        score -= 500;
+        scoreText.textContent = `Score: ${score}`;
         lives--;
         livesText.textContent = `Lives: ${'❤️'.repeat(lives)}`;
         resetPositions();
@@ -432,30 +442,10 @@ function init() {
         chaserGhost.position = 86;
         PacMan.displayPacMan();
         chaserGhost.displayGhost();
+        ambusherGhost.displayGhost();
     }
 }
 
 window.addEventListener("DOMContentLoaded", init);
 
-const mazeLayout = [
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-    1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
-    1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 2, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-    1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
-    1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-];
+
