@@ -217,25 +217,25 @@ function init() {
             case 37: 
                 if (PacMan.position % width !== 0) {
                     newPosition = PacMan.position - 1;
-                    pacManDirection = 'left'
+                    pacManDirection = 'left';
                 }
                 break;
             case 38: 
                 if (PacMan.position >= width) {
                     newPosition = PacMan.position - width;
-                    pacManDirection = 'up'
+                    pacManDirection = 'up';
                 }
                 break;
             case 39: 
                 if (PacMan.position % width < width - 1) {
                     newPosition = PacMan.position + 1;
-                    pacManDirection = 'right'
+                    pacManDirection = 'right';
                 }
                 break;
             case 40: 
                 if (PacMan.position < gridSize - width) {
                     newPosition = PacMan.position + width;
-                    pacManDirection = 'down'
+                    pacManDirection = 'down';
                 }
                 break;
         }
@@ -292,7 +292,7 @@ function init() {
     function gameComplete() {
         alert(`Congratulations, you beat the game! Your final score is: ${score}`);
         let fullReset = true;
-        resetGame(fullReset)
+        resetGame(fullReset);
     }
        
     // Move chaser Ghost 
@@ -339,11 +339,10 @@ function init() {
         const ambushRoute = bfs(ambusherGhost.position, ambushPosition);
         const distanceFromPacMan = manhattanDistance(pacmanPosition, ambusherGhost.position)
 
-        // if (distanceFromPacMan <= 4) {
-        //     springAmbush();
-        // //     return
-        // } else 
-        if (ambushRoute.length > 0) {
+        if (distanceFromPacMan <= 4) {
+            springAmbush();
+            return
+        } else if (ambushRoute.length > 0) {
             const nextMove = ambushRoute[0];
             let move;
             switch (nextMove) {
@@ -367,6 +366,36 @@ function init() {
             }
         }
     }
+
+    function springAmbush() {
+        const ambushRoute = bfs(ambusherGhost.position, PacMan.position)
+        if (ambushRoute.length > 0) {
+            const nextMove = ambushRoute[0];
+            //console.log(nextMove)
+            let move;
+            switch (nextMove) {
+                case 'up':
+                    move = -width;
+                    break;
+                case 'down':
+                    move = width;
+                    break;
+                case 'left':
+                    move = -1;
+                    break;
+                case 'right':
+                    move = 1;
+                    break;
+            }
+            const newPosition = ambusherGhost.position + move;
+            if (isValidMove(newPosition)) {
+                ambusherGhost.move(newPosition)
+                checkCollision()
+            }
+        }
+    }
+        
+
 
    const chaserGhostInterval = setInterval(moveChaserGhost, 500);
    const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500)
