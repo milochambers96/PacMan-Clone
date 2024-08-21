@@ -14,8 +14,8 @@ const mazeLayout = [
     1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1,
     1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1,
     1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 2, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-    1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 4, 3, 3, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1, 0, 1, 0, 1, 3, 3, 4, 0, 1, 0, 1, 0, 1, 0, 1,
     1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1,
     1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1,
     1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
@@ -75,9 +75,21 @@ const chaserGhost = {
         if (this.pathHistory.length > 0) {
             this.position = this.pathHistory.pop();
             this.displayGhost()
+        } else {
+            this.ghostBecamePaniced();
+        }
+    },
+    ghostBecamePaniced() {
+            const possibleMoves = ['up', 'down', 'left', 'right'];
+            const randomMoveIndex = Math.floor(Math.random() * possibleMoves.length);
+            const randomMove = possibleMoves[randomMoveIndex];
+            const newPosition = this.position + getDirection(randomMove);
+            if (isValidMove(newPosition)) {
+                this.move(newPosition);
+            }
         }
     }
-};
+
 
 const ambusherGhost = {
     position: 287,
@@ -101,9 +113,20 @@ const ambusherGhost = {
         if (this.pathHistory.length > 0) {
             this.position = this.pathHistory.pop();
             this.displayGhost()
+        } else {
+            this.ghostBecamePaniced();
+        }
+    },
+    ghostBecamePaniced() {
+            const possibleMoves = ['up', 'down', 'left', 'right'];
+            const randomMoveIndex = Math.floor(Math.random() * possibleMoves.length);
+            const randomMove = possibleMoves[randomMoveIndex];
+            const newPosition = this.position + getDirection(randomMove);
+            if (isValidMove(newPosition)) {
+                this.move(newPosition);
+            }
         }
     }
-};
 
 const randomGhost = {
     position: 301,
@@ -150,7 +173,7 @@ function bfs(start, destination) {
     let visited = new Set()
     // Set acts an object that stores unique values of any type. This is good as it stops any duplicate info being stored. Only track new cells. 
     visited.add(start)
-    //!if (PacMan.poweredUp === true) 
+
     while (queue.length > 0) {
         let { position, path } = queue.shift()
         if (position === destination) {
@@ -204,6 +227,19 @@ function manhattanDistance(pos1, pos2) {
     return Math.abs(pos1Row - pos2Row) + Math.abs(pos1Col - pos2Col)
 }
 
+function getDirection(direction) {
+    switch (direction) {
+        case 'up':
+            return -width;
+        case 'down':
+            return width;
+        case 'left':
+            return -1;
+        case 'right':
+            return 1;
+    }
+} 
+
 function init() {
     const grid = document.querySelector('#grid');
     const scoreText = document.querySelector('#score');
@@ -230,9 +266,19 @@ function init() {
                 cell.classList.add('path');
                 const powerPellet = document.createElement('div');
                 powerPellet.classList.add('power-pellet');
-                cell.appendChild(powerPellet)
+                cell.appendChild(powerPellet);
+            } else if (mazeLayout[i] === 3) {
+                cell.classList.add('ghost-house', 'path'); 
+                const pellet = document.createElement('div');
+                pellet.classList.add('pellet');
+                cell.appendChild(pellet);
+            } else if (mazeLayout[i] === 4) {
+                cell.classList.add('ghost-house-door', 'path'); 
+                const pellet = document.createElement('div');
+                pellet.classList.add('pellet');
+                cell.appendChild(pellet);
             } else {
-                cell.classList.add('path')
+                cell.classList.add('path');
                 const pellet = document.createElement('div');
                 pellet.classList.add('pellet');
                 cell.appendChild(pellet);
@@ -330,11 +376,29 @@ function init() {
         }
         powerPelletActive = true;
         PacMan.poweredUp = true;
+        clearInterval(randomGhostInterval)
+        updateGhostHouseDoors(true);
         setTimeout(() => {
             powerPelletActive = false;
             PacMan.poweredUp = false;
+            updateGhostHouseDoors(false)
+            randomGhostInterval = setInterval(moveRandomGhost, 3000);
         }, 10000)
     }
+
+    function updateGhostHouseDoors(toWalls = true) {
+        const ghostHouseDoors = document.querySelectorAll('.ghost-house-door');
+        ghostHouseDoors.forEach((door) => {
+            if (toWalls) {
+                door.classList.remove('path');
+                door.classList.add('wall');
+            } else {
+                door.classList.remove('wall');
+                door.classList.add('path');
+            }
+        });
+    }
+
 
     function gameComplete() {
         alert(`Congratulations, you beat the game! Your final score is: ${score}`);
@@ -455,7 +519,7 @@ function init() {
         resetEatenGhost(eatenGhost)
     }
 
-    const innerSquare = {
+    const ghostHouse = {
         chaser: 189,
         ambusher: 190,
         random: 210
@@ -464,15 +528,17 @@ function init() {
     function resetEatenGhost(ghost) {
         switch (ghost) {
             case 'chaser':
-                chaserGhost.position = innerSquare.chaser;
+                chaserGhost.position = ghostHouse.chaser;
+                chaserGhost.pathHistory = [];
                 chaserGhost.displayGhost();
                 break;
             case 'ambusher':
-                ambusherGhost.position = innerSquare.ambusher;
+                ambusherGhost.position = ghostHouse.ambusher;
+                ambusherGhost.pathHistory= [];
                 ambusherGhost.displayGhost();
                 break;
             case 'random':
-                randomGhost.position = innerSquare.random;
+                randomGhost.position = ghostHouse.random;
                 randomGhost.displayGhost();
                 break;
         }
@@ -511,7 +577,8 @@ function init() {
         clearInterval(ambusherGhostInterval);
         clearInterval(chaserGhostInterval);
         clearInterval(randomGhostInterval);
-        window.removeEventListener("keydown", movePacMan)
+        startButton.disabled = true
+        window.removeEventListener("keyup", movePacMan)
         score = 0;
         scoreText.textContent = `Score: ${score}`;
         lives = 3;
