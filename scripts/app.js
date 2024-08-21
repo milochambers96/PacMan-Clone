@@ -27,6 +27,8 @@ const mazeLayout = [
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 ];
 
+let gameStarted = false;
+
 //Code relating to characters - PacMan and Ghosts
 const PacMan = {
     position: 21,
@@ -156,7 +158,7 @@ function bfs(start, destination) {
         }
         for (const { move, direction } of directions) {
             const newPosition = position + move;
-            // has is a method for Sets - returns boolean whether an element with the specifed value exists. 
+            // has is a method for Sets - returns boolean value as whether an element with the specifed value exists. 
             // Checking that the visted set does not contain the new position
             if (isValidMove(newPosition) && !visited.has(newPosition)) {
                 visited.add(newPosition);
@@ -202,14 +204,19 @@ function manhattanDistance(pos1, pos2) {
     return Math.abs(pos1Row - pos2Row) + Math.abs(pos1Col - pos2Col)
 }
 
-
 function init() {
     const grid = document.querySelector('#grid');
     const scoreText = document.querySelector('#score');
     const livesText = document.querySelector('#lives');
+    const startButton = document.querySelector('#start-game')
 
     let lives = 3;
     let score = 0;
+    let ambusherGhostInterval;
+    let chaserGhostInterval;
+    let randomGhostInterval;
+    let pacManDirection = 'right'
+     
 
     function createGrid() {
         for (let i = 0; i < gridSize; i++) {
@@ -238,9 +245,19 @@ function init() {
     }
     createGrid();
 
-    // In Game Code relating to PacMan
+    startButton.addEventListener('click', startGame);
 
-    let pacManDirection = 'right'
+
+    function startGame() {
+        gameStarted = true;
+        startButton.disabled = true;
+        ambusherGhostInterval = setInterval(moveAmbusherGhost, 500);
+        chaserGhostInterval = setInterval(moveChaserGhost, 500);
+        randomGhostInterval = setInterval(moveRandomGhost, 3000);
+        window.addEventListener("keyup", movePacMan);
+    }
+
+    // In Game Code relating to PacMan
 
     function movePacMan(event) {
         let newPosition;
@@ -278,9 +295,6 @@ function init() {
         pacmanAteAPellet();
         checkCollision();
     }
-
-    window.addEventListener("keydown", movePacMan);
-
 
     // Code relating to pellets & power pellets.
     const arrayOfPellets = Array.from(document.querySelectorAll('.pellet'));
@@ -422,10 +436,6 @@ function init() {
         }
     }
 
-    const chaserGhostInterval = setInterval(moveChaserGhost, 500);
-    const ambusherGhostInterval = setInterval(moveAmbusherGhost, 500);
-    const randomGhostInterval = setInterval(moveRandomGhost, 2000);
-
     function checkCollision() {
         if (powerPelletActive) {
             if (chaserGhost.position === PacMan.position) {
@@ -488,12 +498,14 @@ function init() {
     }
 
     function gameOver() {
+        scoreText.textContent = `Score: ${score}`
         alert(`Oh no, the ghosts got you! Game over! Your final score is: ${score}.`)
         let fullReset = true;
         resetGame(fullReset);
     }
 
     function resetGame() {
+        gameStarted = false;
         powerPelletActive = false;
         clearTimeout(powerPelletTimeout);
         clearInterval(ambusherGhostInterval);
