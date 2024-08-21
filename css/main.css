@@ -8,6 +8,7 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #000;
+    overflow: hidden;
 }
 
 .arcade-machine {
@@ -39,6 +40,51 @@ h2 {
     margin: 10px 0;
 }
 
+.game-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.game-bio {
+    background-color: #000080;
+    padding: 2rem;
+    margin-right: 1rem;
+    width: 38%;
+    font-family: "Poppins", sans-serif;
+    color: #d1dbe0;
+    text-align: justify;
+    border: 3px solid #FFFF00;
+    border-radius: 4%;
+}
+
+
+
+.special-text {
+    font-family: "Bangers", system-ui;
+}
+
+#dotman-text {
+    color: #FFFF00;
+}
+
+#chaser-text {
+    color: #FF0000;
+}
+
+#ambusher-text {
+    color: rgb(251, 9, 251);
+}
+
+#random-text {
+    color: #FFA500;
+}
+
+#power-pellet-text {
+    color: #00CED1
+}
+
 .UI {
     background-color: #000080;
     display: flex;
@@ -46,10 +92,10 @@ h2 {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
-    padding: 8px;
+    padding: 20px 8px;
     border: 3px solid #FFFF00;
+    border-radius: 4%;
     font-family: 'Press Start 2P', cursive;
-
 }
 
 #score, #lives {
@@ -58,14 +104,13 @@ h2 {
     line-height: 1.2;
 }
 
-
 #grid-container {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #000;
-    width: 85vmin;
-    height: 85vmin;
+    width: 60%;
+    height: 70vmin;
     border: 3px solid #FFFF00;
 }
 
@@ -118,7 +163,7 @@ h2 {
 }
 
 .pacman-powerup {
-    background-color: #e5efef;
+    background-color: #00CED1;
     border-radius: 50%;
 }
 

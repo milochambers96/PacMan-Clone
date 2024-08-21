@@ -414,15 +414,6 @@ function init() {
         }
     }
 
-    // function reverseDirection(direction) {
-    //     switch (direction) {
-    //         case 'up': return 'down';
-    //         case 'down': return 'up';
-    //         case 'left': return 'right';
-    //         case 'right': return 'left';
-    //     }
-    // }
-
     function moveRandomGhost() {
         randomPosition = Math.floor(Math.random() * cells.length);
         if (isValidMove(randomPosition)) {
@@ -456,7 +447,7 @@ function init() {
 
     const innerSquare = {
         chaser: 189,
-        ambusher: 199,
+        ambusher: 190,
         random: 210
     };
 

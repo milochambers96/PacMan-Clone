@@ -5,28 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Russo+One&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Audiowide&family=Bangers&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Luckiest+Guy&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Russo+One&family=Audiowide&family=Bangers&family=Lato:wght@100;300;400;700;900&family=Luckiest+Guy&family=Poppins:wght@100;400;700&display=swap"
         rel="stylesheet">
     <script src="./scripts/app.js"></script>
     <title>PacMan-Clone</title>
 </head>
+
 <body>
     <div class="arcade-machine">
         <h1>DotMan</h1>
         <h2>A Bootleg PacMan Adventure!</h2>
-        <div class="game-bio">
-            <p></p>
-        </div>
         <div class='UI'>
             <div id='score'>Score: 0</div>
             <div id='lives'>Lives: ❤️ ❤️ ❤️ </div>
         </div>
-        <div id="grid-container">
-            <div id="grid"></div>
-        </div>
+        <div class="game-content">
+            <div class="game-bio">
+                <p>Welcome to DotMan, a new take on the classic maze-chase adventure! You are <span class="special-text" id="dotman-text">DotMan</span>, Pac-Man's awkward, yet well-meaning cousin. In a twist of fate, you've found yourself deep in debt to your famous relative. To pay Pac-Man back, you've agreed to gobble up all the pellets he has left behind. But be careful! This maze is crawling with ghosts, and they're out to get you!</p>
+
+                <p>Know your Ghosts:</p>
+                <ul>
+                    <li><span class="special-text" id="chaser-text">Determined Dot</span> - The relentless chaser,
+                        always hot on DotMan's heels. With an unyielding drive to catch you, keep moving to stay ahead!
+                    </li>
+                    <li><span class="special-text" id="ambusher-text">Devious Dot</span> - The crafty ambusher, always
+                        trying to get ahead and spring a trap. Watch your path closely, or you might walk right into
+                        Devious Dot's clutches.</li>
+                    <li><span class="special-text" id="random-text">Dizzy Dot</span> - This ghost only moves by
+                        randomly teleporting around the maze. One moment it's there, the next it's somewhere else,
+                        making it an
+                        unpredictable threat to DotMan.</li>
+                </ul>
+
+                <p> Navigate the Maze by using your arrow keys to guide DotMan through the labyrinth. Once all the pellets have been gobbled up, you have beaten the game. But beware the ghosts, getting caught by one will decrease your score, so stay sharp and avoid their clutches. </p>
+
+                <p>Keep an eye out for <span class="special-text" id="power-pellet-text">Power Pellets</span>. These special squares turn DotMan a birght cyan for 10 seconds, giving him the chance to chase down the ghosts and score extra points.</p>
+
+            </div>
+            
+            <div id="grid-container">
+                <div id="grid"></div>
+            </div>
     </div>
 </body>
