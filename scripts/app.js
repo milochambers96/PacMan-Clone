@@ -587,6 +587,7 @@ function init() {
         cells.length = 0;
         createGrid();
         resetPositions();
+        resetPellets();
     }
 
     function resetPositions() {
@@ -597,6 +598,10 @@ function init() {
         chaserGhost.displayGhost();
         ambusherGhost.displayGhost();
     }
+
+    function resetPellets() {
+        pellets = arrayOfPellets.length
+    } 
 }
 
 window.addEventListener("DOMContentLoaded", init);
