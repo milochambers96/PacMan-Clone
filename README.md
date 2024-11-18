@@ -280,3 +280,29 @@ git clone https://github.com/milochambers96/PacMan-Clone.git
 
 - Original PacMan concept by Namco
 - Project completed as part of General Assembly's Software Engineering Bootcamp
+
+## Post 1 Week Sprint Updates
+
+### Recent Updates (November 2024)
+
+#### Interface Redesign
+
+- Streamlined game interface with centred layout
+- Transformed start screen into focused instruction panel
+- Improved transition between instructions and gameplay
+- Enhanced scrollable content for better readability
+- Maintained arcade aesthetic whilst improving usability
+
+#### Visual Improvements
+
+- Centred game components for better visual balance
+- Fixed UI scaling issues
+- Improved instruction panel navigation
+- Standardised game and instruction panel dimensions (600x600)
+
+#### Known Issues
+
+- Mobile responsiveness needs further optimisation
+- UI scaling could be improved for different screen sizes
+
+These updates focused on improving the player's initial experience whilst maintaining the core gameplay mechanics. The next phase of development will focus on implementing the future improvements listed above, with particular emphasis on mobile responsiveness and dynamic UI scaling.

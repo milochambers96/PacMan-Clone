@@ -1,218 +1,212 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #000;
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
 }
 
 .arcade-machine {
-    display: flex;
-    flex-direction: column;
-    max-width: 95vw;
-    max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 95vw;
+  max-height: 95vh;
 }
 
 h1 {
-    color: #FFFF00;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-shadow: 2px 2px 0 #000000, 4px 4px 0 #FFFF00;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 2vw;
-    margin: 10px 0;
+  color: #ffff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 2px 2px 0 #000000, 4px 4px 0 #ffff00;
+  font-family: "Press Start 2P", cursive;
+  font-size: 2vw;
+  margin: 10px 0;
 }
 
 h2 {
-    color: #FFFF00;
-    text-shadow: 1px 1px 0 #000000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Bangers", system-ui;
-    font-size: 1.5vw;
-    margin: 10px 0;
+  color: #ffff00;
+  text-shadow: 1px 1px 0 #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Bangers", system-ui;
+  font-size: 1.5vw;
+  margin: 10px 0;
 }
 
 .UI {
-    background-color: #000080;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 20px 8px;
-    border: 3px solid #FFFF00;
-    border-radius: 4%;
-    font-family: 'Press Start 2P', cursive;
+  background-color: #000080;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 20px 8px;
+  border: 3px solid #ffff00;
+  border-radius: 4%;
+  font-family: "Press Start 2P", cursive;
 }
 
-#score, #lives {
-    color: #FFFF00;
-    font-size: 1.2vw;
-    line-height: 1.2;
+#score,
+#lives {
+  color: #ffff00;
+  font-size: 1.2vw;
+  line-height: 1.2;
 }
 
 .game-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
 }
 
 .game-bio {
-    background-color: #000080;
-    padding: 1rem;
-    margin-right: 1rem;
-    width: 48%;
-    font-family: "Poppins", sans-serif;
-    color: #d1dbe0;
-    text-align: justify;
-    border: 3px solid #FFFF00;
-    border-radius: 4%;
-    overflow-y: auto; 
-    height: 70vmin; 
-    max-height: 70vmin;
+  background-color: #000080;
+  padding: 1rem;
+  width: 600px;
+  font-family: "Poppins", sans-serif;
+  color: #d1dbe0;
+  text-align: justify;
+  border: 3px solid #ffff00;
+  border-radius: 4%;
+  height: 600px;
+  overflow-y: auto;
 }
 
-/* Game Bio Font size adjustments based on screen width */
 @media (max-width: 1024px) {
-    .game-bio {
-        font-size: 1.2vw;
-    }
+  .game-bio {
+    font-size: 1.2vw;
+  }
 }
 
 @media (max-width: 768px) {
-    .game-bio {
-        font-size: 1vw;
-    }
+  .game-bio {
+    font-size: 1vw;
+  }
 }
 
 @media (max-width: 480px) {
-    .game-bio {
-        font-size: 0.9vw;
-    }
+  .game-bio {
+    font-size: 0.9vw;
+  }
 }
 
-/* Special Text and Character Styles for Game Bio  */
 .special-text {
-    font-family: "Bangers", system-ui;
+  font-family: "Bangers", system-ui;
 }
 
 #dotman-text {
-    color: #FFFF00;
+  color: #ffff00;
 }
 
 #chaser-text {
-    color: #FF0000;
+  color: #ff0000;
 }
 
 #ambusher-text {
-    color: rgb(251, 9, 251);
+  color: rgb(251, 9, 251);
 }
 
 #random-text {
-    color: #FFA500;
+  color: #ffa500;
 }
 
 #power-pellet-text {
-    color: #00CED1;
+  color: #00ced1;
 }
 
 #start-game {
-    display: block; 
-    margin: 1rem auto; 
-    padding: 0.5rem 1rem; 
-    background-color: #FFFF00; 
-    color: #000000; 
-    border: none; 
-    border-radius: 4px; 
-    font-family: 'Press Start 2P', cursive; 
-    font-size: 1rem; 
-    cursor: pointer; 
+  display: block;
+  margin: 1rem auto;
+  padding: 0.5rem 1rem;
+  background-color: #ffff00;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 /* Styles for Maze, characters, and items */
 #grid-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
-    width: 50%;
-    height: 70vmin;
-    border: 3px solid #FFFF00;
+  width: 600px;
+  height: 600px;
+  border: 3px solid #ffff00;
+  display: none;
 }
 
 #grid {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
 }
 
 .cell {
-    flex: 0 0 5%;
-    height: 5%;
-    position: relative;
-    background-color: #000;
+  flex: 0 0 5%;
+  height: 5%;
+  position: relative;
+  background-color: #000;
 }
 
 .pellet {
-    width: 25%;
-    height: 25%;
-    background-color: #f0f7f7;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  width: 25%;
+  height: 25%;
+  background-color: #f0f7f7;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .power-pellet {
-    width: 40%;
-    height: 40%;
-    background-color: #00CED1;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  width: 40%;
+  height: 40%;
+  background-color: #00ced1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .wall {
-    background-color: #0000FF;
+  background-color: #0000ff;
 }
 
 .path {
-    background-color: #000;
+  background-color: #000;
 }
 
 .pacman {
-    background-color: #FFFF00;
-    border-radius: 50%;
+  background-color: #ffff00;
+  border-radius: 50%;
 }
 
 .pacman-powerup {
-    background-color: #00CED1;
-    border-radius: 50%;
+  background-color: #00ced1;
+  border-radius: 50%;
 }
 
 .chaser-ghost {
-    background-color: #FF0000;
-    border-radius: 50%;
+  background-color: #ff0000;
+  border-radius: 50%;
 }
 
 .ambusher-ghost {
-    background-color: rgb(251, 9, 251);
-    border-radius: 50%;
+  background-color: rgb(251, 9, 251);
+  border-radius: 50%;
 }
 
 .random-ghost {
-    background-color: #FFA500;
-    border-radius: 50%;
+  background-color: #ffa500;
+  border-radius: 50%;
 }
