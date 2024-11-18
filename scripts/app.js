@@ -297,45 +297,87 @@ function init() {
     chaserGhostInterval = setInterval(moveChaserGhost, 500);
     randomGhostInterval = setInterval(moveRandomGhost, 3000);
     window.addEventListener("keyup", movePacman);
+    addSwipeControls();
   }
 
   // In Game Code relating to PacMan
 
-  function movePacman(event) {
+  function handleMovement(direction) {
     let newPosition;
-    event.preventDefault();
-    // Added to prevent window scrolling if the player holds down the down or up arrows.
-    switch (event.keyCode) {
-      case 37:
+
+    switch (direction) {
+      case "left":
         if (pacman.position % width !== 0) {
           newPosition = pacman.position - 1;
           pacmanDirection = "left";
         }
         break;
-      case 38:
+      case "up":
         if (pacman.position >= width) {
           newPosition = pacman.position - width;
           pacmanDirection = "up";
         }
         break;
-      case 39:
+      case "right":
         if (pacman.position % width < width - 1) {
           newPosition = pacman.position + 1;
           pacmanDirection = "right";
         }
         break;
-      case 40:
+      case "down":
         if (pacman.position < gridSize - width) {
           newPosition = pacman.position + width;
           pacmanDirection = "down";
         }
         break;
     }
+
     if (newPosition !== undefined) {
       pacman.move(newPosition);
+      pacmanAteAPellet();
+      checkCollision();
     }
-    pacmanAteAPellet();
-    checkCollision();
+  }
+
+  function movePacman(event) {
+    event.preventDefault();
+    const keyToDirection = {
+      37: "left",
+      38: "up",
+      39: "right",
+      40: "down",
+    };
+    handleMovement(keyToDirection[event.keyCode]);
+  }
+
+  function addSwipeControls() {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const grid = document.querySelector("#grid");
+
+    grid.addEventListener("touchstart", (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+
+    grid.addEventListener("touchend", (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      const minSwipeDistance = 30;
+
+      if (
+        Math.abs(deltaX) > Math.abs(deltaY) &&
+        Math.abs(deltaX) > minSwipeDistance
+      ) {
+        handleMovement(deltaX > 0 ? "right" : "left");
+      } else if (Math.abs(deltaY) > minSwipeDistance) {
+        handleMovement(deltaY > 0 ? "down" : "up");
+      }
+    });
   }
 
   // Code relating to pellets & power pellets.

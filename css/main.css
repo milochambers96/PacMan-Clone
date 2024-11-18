@@ -14,8 +14,10 @@ body {
 .arcade-machine {
   display: flex;
   flex-direction: column;
-  max-width: 95vw;
-  max-height: 95vh;
+  align-items: center;
+  width: min(600px, 95vh, 95vw);
+  margin: 0 auto;
+  padding: 10px;
 }
 
 h1 {
@@ -25,7 +27,7 @@ h1 {
   justify-content: center;
   text-shadow: 2px 2px 0 #000000, 4px 4px 0 #ffff00;
   font-family: "Press Start 2P", cursive;
-  font-size: 2vw;
+  font-size: clamp(16px, 3vw, 24px);
   margin: 10px 0;
 }
 
@@ -36,17 +38,17 @@ h2 {
   align-items: center;
   justify-content: center;
   font-family: "Bangers", system-ui;
-  font-size: 1.5vw;
+  font-size: clamp(14px, 3vw, 24px);
   margin: 10px 0;
 }
 
 .UI {
   background-color: #000080;
   display: flex;
-  width: 100%;
+  width: min(600px, 95vh, 95vw);
+  margin-bottom: 10px;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
   padding: 20px 8px;
   border: 3px solid #ffff00;
   border-radius: 4%;
@@ -56,46 +58,29 @@ h2 {
 #score,
 #lives {
   color: #ffff00;
-  font-size: 1.2vw;
+  font-size: clamp(12px, 2.5vw, 18px);
   line-height: 1.2;
 }
 
 .game-content {
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: min(600px, 95vh, 95vw);
   position: relative;
 }
 
 .game-bio {
   background-color: #000080;
   padding: 1rem;
-  width: 600px;
+  width: min(600px, 95vh, 95vw);
+  height: min(600px, 95vh, 95vw);
   font-family: "Poppins", sans-serif;
   color: #d1dbe0;
   text-align: justify;
   border: 3px solid #ffff00;
   border-radius: 4%;
-  height: 600px;
   overflow-y: auto;
-}
-
-@media (max-width: 1024px) {
-  .game-bio {
-    font-size: 1.2vw;
-  }
-}
-
-@media (max-width: 768px) {
-  .game-bio {
-    font-size: 1vw;
-  }
-}
-
-@media (max-width: 480px) {
-  .game-bio {
-    font-size: 0.9vw;
-  }
+  font-size: clamp(12px, 3vw, 16px);
 }
 
 .special-text {
@@ -137,8 +122,8 @@ h2 {
 
 /* Styles for Maze, characters, and items */
 #grid-container {
-  width: 600px;
-  height: 600px;
+  width: min(600px, 95vh, 95vw);
+  height: min(600px, 95vh, 95vw);
   border: 3px solid #ffff00;
   display: none;
 }

@@ -285,24 +285,121 @@ git clone https://github.com/milochambers96/PacMan-Clone.git
 
 ### Recent Updates (November 2024)
 
-#### Interface Redesign
+You're right. Here's just the Recent Updates section to add to your existing README:
+
+## Recent Updates (November 2024)
+
+### Technical Implementation Highlights
+
+#### Movement Control System
+
+The game now uses a unified movement system that handles both keyboard and touch inputs:
+
+```javascript
+function handleMovement(direction) {
+  let newPosition;
+  switch (direction) {
+    case "left":
+      if (pacman.position % width !== 0) {
+        newPosition = pacman.position - 1;
+        pacmanDirection = "left";
+      }
+      break;
+    case "up":
+      if (pacman.position >= width) {
+        newPosition = pacman.position - width;
+        pacmanDirection = "up";
+      }
+      break;
+    case "right":
+      if (pacman.position % width < width - 1) {
+        newPosition = pacman.position + 1;
+        pacmanDirection = "right";
+      }
+      break;
+    case "down":
+      if (pacman.position < gridSize - width) {
+        newPosition = pacman.position + width;
+        pacmanDirection = "down";
+      }
+      break;
+  }
+  if (newPosition !== undefined) {
+    pacman.move(newPosition);
+    pacmanAteAPellet();
+    checkCollision();
+  }
+}
+```
+
+#### Swipe Detection
+
+Added touch controls with minimum swipe threshold:
+
+```javascript
+function addSwipeControls() {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const grid = document.querySelector("#grid");
+
+  grid.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  });
+
+  grid.addEventListener("touchend", (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    const minSwipeDistance = 30;
+
+    if (
+      Math.abs(deltaX) > Math.abs(deltaY) &&
+      Math.abs(deltaX) > minSwipeDistance
+    ) {
+      handleMovement(deltaX > 0 ? "right" : "left");
+    } else if (Math.abs(deltaY) > minSwipeDistance) {
+      handleMovement(deltaY > 0 ? "down" : "up");
+    }
+  });
+}
+```
+
+### Interface Redesign
 
 - Streamlined game interface with centred layout
 - Transformed start screen into focused instruction panel
 - Improved transition between instructions and gameplay
+- Added mobile-friendly swipe controls for smoother gameplay
 - Enhanced scrollable content for better readability
 - Maintained arcade aesthetic whilst improving usability
 
-#### Visual Improvements
+### Visual Improvements
 
 - Centred game components for better visual balance
 - Fixed UI scaling issues
 - Improved instruction panel navigation
-- Standardised game and instruction panel dimensions (600x600)
+- Standardised dimensions for consistent mobile/desktop experience
+- Responsive scaling for different screen sizes
 
-#### Known Issues
+### Technical Updates
 
-- Mobile responsiveness needs further optimisation
-- UI scaling could be improved for different screen sizes
+- Implemented swipe detection with minimum distance threshold
+- Added touchstart/touchend event handling for mobile gameplay
+- Unified movement logic for both touch and keyboard controls
+- Optimised UI element scaling for mobile devices
 
-These updates focused on improving the player's initial experience whilst maintaining the core gameplay mechanics. The next phase of development will focus on implementing the future improvements listed above, with particular emphasis on mobile responsiveness and dynamic UI scaling.
+### Known Issues
+
+- Could improve UI responsiveness on very small screens
+- Touch sensitivity may need further calibration
+
+### Controls
+
+- Mobile: Swipe in desired direction (up/down/left/right)
+- Desktop: Arrow keys
+- Press the start button to begin the game
+- Collect all pellets to complete the game
