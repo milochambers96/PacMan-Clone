@@ -181,6 +181,7 @@ function bfs(start, destination) {
         }
         for (const { move, direction } of directions) {
             const newPosition = position + move;
+            //
             // has is a method for Sets - returns boolean value as whether an element with the specifed value exists. 
             // Checking that the visted set does not contain the new position
             if (isValidMove(newPosition) && !visited.has(newPosition)) {
