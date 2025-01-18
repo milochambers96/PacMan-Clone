@@ -1,5 +1,5 @@
 
-![GA-logo](https://github.com/user-attachments/assets/1c2f68f9-325e-487e-a309-810014af3d58)
+![pinpng com-general-assembly-logo-png-3404825](https://github.com/user-attachments/assets/c64a55a6-ba11-4b9a-a747-78fe6ed524ba)
 
 # DotMan - A PacMan Adventure
 
