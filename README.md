@@ -1,11 +1,11 @@
 
-![GeneralAssemblyBanner](https://github.com/user-attachments/assets/465fe652-10d8-41b2-934e-c5a4d07fef7e)
+![GA-logo](https://github.com/user-attachments/assets/1c2f68f9-325e-487e-a309-810014af3d58)
 
 # DotMan - A PacMan Adventure
 
 ## Overview
 
-This is my first project of the software engineering bootcamp at General Assemby London. The assignment was to create a grid-based game to be rendered in the browser, using HTML, CSS, and JavaScript. The project was to be completed individually within one week.
+This is my first project of the software engineering bootcamp at General Assemby, London. The assignment was to create a grid-based game to be rendered in the browser, using HTML, CSS, and JavaScript. The project was to be completed individually within one week.
 
 I chose to create DotMan, as an ode to the classic PacMan maze game. DotMan mostly follows the same dynamics as PacMan, however, a few twists have been added, most notably a ghost that can teleport randomly across the maze in a sort of whack-a-mole style, adding a new challenge to the game.
 
