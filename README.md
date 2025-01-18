@@ -1,3 +1,6 @@
+
+![GeneralAssemblyBanner](https://github.com/user-attachments/assets/465fe652-10d8-41b2-934e-c5a4d07fef7e)
+
 # DotMan - A PacMan Adventure
 
 ## Overview
