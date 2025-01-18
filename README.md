@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is my first project of the software engineering bootcamp at GA London. The assignment was to create a grid-based game to be rendered in the browser, using HTML, CSS, and JavaScript. The project was to be completed individually within one week.
+This is my first project of the software engineering bootcamp at General Assemby London. The assignment was to create a grid-based game to be rendered in the browser, using HTML, CSS, and JavaScript. The project was to be completed individually within one week.
 
 I chose to create DotMan, as an ode to the classic PacMan maze game. DotMan mostly follows the same dynamics as PacMan, however, a few twists have been added, most notably a ghost that can teleport randomly across the maze in a sort of whack-a-mole style, adding a new challenge to the game.
 
@@ -283,13 +283,7 @@ git clone https://github.com/milochambers96/PacMan-Clone.git
 
 ## Post 1 Week Sprint Updates
 
-### Recent Updates (November 2024)
-
-You're right. Here's just the Recent Updates section to add to your existing README:
-
-## Recent Updates (November 2024)
-
-### Technical Implementation Highlights
+### November 2024
 
 #### Movement Control System
 
@@ -397,9 +391,39 @@ function addSwipeControls() {
 - Could improve UI responsiveness on very small screens
 - Touch sensitivity may need further calibration
 
-### Controls
+### January 2025
+
+#### Responsive Design Optimization
+
+- Implemented consistent viewport scaling using min(600px, 90vh, 90vw)
+- Added transform scale(0.85) for laptop screens to ensure content fits viewport
+- Removed redundant CSS properties to improve maintainability
+- Enhanced cross-device compatibility ensuring balanced visual presentation
+- Fixed spacing issues across mobile, laptop, and desktop views
+
+#### Game Logic Improvements
+
+- Fixed score synchronization in end-game scenarios
+- Corrected score display mismatches between UI and game-end alerts
+- Added proper score update timing for both win and loss conditions
+- Ensured UI score accurately matches final score in alerts
+
+#### Mobile Controls Enhancement
+
+- Fixed double-movement issue after game reset on mobile devices
+- Refactored swipe controls to use named handler functions
+- Implemented proper cleanup of touch event listeners
+- Added safeguards against duplicate swipe handlers
+- Improved touch control responsiveness and reliability
+
+### Known Issues
+
+- Original known issues from November 2024 have been resolved
+- Continue monitoring mobile touch sensitivity for user feedback
+
+## Controls
 
 - Mobile: Swipe in desired direction (up/down/left/right)
 - Desktop: Arrow keys
 - Press the start button to begin the game
-- Collect all pellets to complete the game
+- Collect all pellets without the ghosts catching you to complete the game
