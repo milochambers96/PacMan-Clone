@@ -1,7 +1,8 @@
+<div align="right" style="background-color: white">
+<img src="https://github.com/user-attachments/assets/9fba1ed7-2eb9-45ea-bd32-fba7d5ca0c67" alt="DotMan Game Banner" width="80" height="auto" />
+</div>
 
-![pinpng com-general-assembly-logo-png-3404825](https://github.com/user-attachments/assets/c64a55a6-ba11-4b9a-a747-78fe6ed524ba)
-
-# DotMan - A PacMan Adventure
+# DotMan - A Bootleg PacMan Adventure
 
 ## Overview
 
