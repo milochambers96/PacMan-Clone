@@ -1,5 +1,5 @@
 <div align="right">
-<img src="https://github.com/user-attachments/assets/9fba1ed7-2eb9-45ea-bd32-fba7d5ca0c67" alt="DotMan Game Banner" width="80" height="auto" />
+<img src="https://github.com/user-attachments/assets/9fba1ed7-2eb9-45ea-bd32-fba7d5ca0c67" alt="GA Logo" width="80" height="auto" />
 </div>
 
 # DotMan - A Bootleg PacMan Adventure
