@@ -5,19 +5,52 @@
 body {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start;
+  min-height: 100vh;
   background-color: #000;
   overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 .arcade-machine {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(600px, 95vh, 95vw);
+  width: min(600px, 90vh, 90vw);
   margin: 0 auto;
   padding: 10px;
+  transform-origin: top center;
+}
+
+/* Mobile device media query */
+@media screen and (max-width: 768px) {
+  body {
+    align-items: center;
+    padding-top: 10px;
+  }
+
+  .game-bio {
+    max-height: 90vh;
+  }
+}
+
+/* laptop media query */
+@media screen and (min-width: 769px) and (max-width: 1366px) {
+  body {
+    align-items: center;
+  }
+  .arcade-machine {
+    transform: scale(0.85);
+  }
+}
+
+/* Desktop media query */
+
+@media screen and (min-width: 1367px) {
+  body {
+    padding: 60px 0;
+  }
 }
 
 h1 {
@@ -45,7 +78,7 @@ h2 {
 .UI {
   background-color: #000080;
   display: flex;
-  width: min(600px, 95vh, 95vw);
+  width: min(600px, 90vh, 90vw);
   margin-bottom: 10px;
   align-items: center;
   justify-content: space-between;
@@ -65,15 +98,16 @@ h2 {
 .game-content {
   display: flex;
   justify-content: center;
-  width: min(600px, 95vh, 95vw);
+  width: min(600px, 90vh, 90vw);
   position: relative;
+  height: auto;
 }
 
 .game-bio {
   background-color: #000080;
   padding: 1rem;
-  width: min(600px, 95vh, 95vw);
-  height: min(600px, 95vh, 95vw);
+  width: min(600px, 90vh, 90vw);
+  height: min(600px, 90vh, 90vw);
   font-family: "Poppins", sans-serif;
   color: #d1dbe0;
   text-align: justify;
@@ -122,8 +156,8 @@ h2 {
 
 /* Styles for Maze, characters, and items */
 #grid-container {
-  width: min(600px, 95vh, 95vw);
-  height: min(600px, 95vh, 95vw);
+  width: min(600px, 90vh, 90vw);
+  height: min(600px, 90vh, 90vw);
   border: 3px solid #ffff00;
   display: none;
 }
