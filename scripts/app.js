@@ -354,13 +354,18 @@ function init() {
     let touchStartX = 0;
     let touchStartY = 0;
     const grid = document.querySelector("#grid");
+    let isProcessingSwipe = false;
 
-    grid.addEventListener("touchstart", (e) => {
+    function handleTouchStart(e) {
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
-    });
+      isProcessingSwipe = false;
+    }
 
-    grid.addEventListener("touchend", (e) => {
+    function handleTouchEnd(e) {
+      if (isProcessingSwipe) return;
+      isProcessingSwipe = true;
+
       const touchEndX = e.changedTouches[0].clientX;
       const touchEndY = e.changedTouches[0].clientY;
 
@@ -377,7 +382,25 @@ function init() {
       } else if (Math.abs(deltaY) > minSwipeDistance) {
         handleMovement(deltaY > 0 ? "down" : "up");
       }
-    });
+
+      setTimeout(() => {
+        isProcessingSwipe = false;
+      }, 100);
+    }
+
+    grid.addEventListener("touchstart", handleTouchStart);
+    grid.addEventListener("touchend", handleTouchEnd);
+
+    grid.handleTouchStart = handleTouchStart;
+    grid.handleTouchEnd = handleTouchEnd;
+  }
+
+  function removeSwipeControls() {
+    const grid = document.querySelector("#grid");
+    if (grid && grid.handleTouchStart && grid.handleTouchEnd) {
+      grid.removeEventListener("touchstart", grid.handleTouchStart);
+      grid.removeEventListener("touchend", grid.handleTouchEnd);
+    }
   }
 
   // Code relating to pellets & power pellets.
@@ -633,6 +656,7 @@ function init() {
     document.querySelector(".game-bio").style.display = "block";
     document.querySelector("#grid-container").style.display = "none";
     window.removeEventListener("keyup", movePacman);
+    removeSwipeControls();
     score = 0;
     scoreText.textContent = `Score: ${score}`;
     lives = 3;
