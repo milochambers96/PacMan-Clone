@@ -410,7 +410,9 @@ function init() {
       }
     });
     if (pellets <= 0) {
-      gameComplete();
+      setTimeout(() => {
+        gameComplete();
+      }, 0);
     }
   }
 
@@ -597,7 +599,9 @@ function init() {
     score -= 500;
     scoreText.textContent = `Score: ${score}`;
     if (lives === 0) {
-      gameOver();
+      setTimeout(() => {
+        gameOver();
+      }, 0);
       return;
     }
     if (lives === 1) {
@@ -612,7 +616,6 @@ function init() {
   }
 
   function gameOver() {
-    scoreText.textContent = `Score: ${score}`;
     alert(
       `Oh no, the ghosts got you! Game over! Your final score is: ${score}.`
     );
