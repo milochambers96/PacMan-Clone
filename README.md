@@ -6,7 +6,7 @@
 
 ## Overview
 
-This is my first project of the software engineering bootcamp at General Assemby, London. The assignment was to create a grid-based game to be rendered in the browser, using HTML, CSS, and JavaScript. The project was to be completed individually within one week.
+This is was my first project of the software engineering bootcamp at General Assemby, London. The assignment was to create a grid-based game to be rendered in the browser, using HTML, CSS, and JavaScript. The project was to be completed individually within one week.
 
 I chose to create DotMan, as an ode to the classic PacMan maze game. DotMan mostly follows the same dynamics as PacMan, however, a few twists have been added, most notably a ghost that can teleport randomly across the maze in a sort of whack-a-mole style, adding a new challenge to the game.
 
