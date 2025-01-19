@@ -45,6 +45,7 @@ html {
 @media screen and (min-width: 769px) and (max-width: 1366px) {
   body {
     align-items: center;
+    padding: 20px 0 40px 0;
   }
   .arcade-machine {
     transform: scale(0.85);
