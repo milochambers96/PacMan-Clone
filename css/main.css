@@ -13,6 +13,10 @@ body {
   margin: 0;
 }
 
+html {
+  height: 100%;
+}
+
 .arcade-machine {
   display: flex;
   flex-direction: column;
@@ -20,18 +24,20 @@ body {
   width: min(600px, 90vh, 90vw);
   margin: 0 auto;
   padding: 10px;
-  transform-origin: top center;
+  transform-origin: center center;
+  position: relative;
+  height: auto;
 }
 
 /* Mobile device media query */
 @media screen and (max-width: 768px) {
   body {
-    align-items: center;
-    padding-top: 10px;
+    align-items: flex-start;
   }
 
-  .game-bio {
-    max-height: 90vh;
+  .arcade-machine {
+    transform: scale(1);
+    margin-top: 20px;
   }
 }
 
@@ -42,6 +48,7 @@ body {
   }
   .arcade-machine {
     transform: scale(0.85);
+    margin: auto;
   }
 }
 
@@ -49,7 +56,12 @@ body {
 
 @media screen and (min-width: 1367px) {
   body {
-    padding: 60px 0;
+    align-items: center;
+  }
+
+  .arcade-machine {
+    transform: scale(1);
+    margin: auto;
   }
 }
 
