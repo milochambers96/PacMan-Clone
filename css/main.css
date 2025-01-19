@@ -22,45 +22,43 @@ html {
   flex-direction: column;
   align-items: center;
   width: min(600px, 90vh, 90vw);
+  max-height: 85vh;
   margin: 0 auto;
   padding: 10px;
   transform-origin: center center;
   position: relative;
-  height: auto;
   margin-bottom: 60px;
 }
 
-/* Mobile device media query */
 @media screen and (max-width: 768px) {
   body {
     align-items: flex-start;
-    padding: 20px 0 40px 0;
+    padding-top: 5vh;
   }
 
   .arcade-machine {
     transform: scale(1);
-    margin-top: 20px;
+    margin-top: 2vh;
   }
 }
 
-/* laptop media query */
 @media screen and (min-width: 769px) and (max-width: 1366px) {
   body {
     align-items: flex-start;
-    padding: 40px 0;
+    padding-top: 5vh;
   }
+
   .arcade-machine {
     transform: scale(0.85);
-    margin: auto;
-    margin: 40px auto 80px auto;
+    margin-top: 2vh;
   }
 }
 
 /* Desktop media query */
-
 @media screen and (min-width: 1367px) {
   body {
     align-items: center;
+    padding: 5vh 0;
   }
 
   .arcade-machine {
