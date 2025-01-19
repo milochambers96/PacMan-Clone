@@ -423,6 +423,7 @@ function addSwipeControls() {
 ### Known Issues
 
 - Some minor spacing inconsistencies on laptop screens where the game content touches the bottom edge - view at 80% zoom for optimal laptop viewing
+- The end game alert does not always align with the score shown on the UI. The UI appears to isometimes be one collision behind the acutal score
 
 ## Controls
 
