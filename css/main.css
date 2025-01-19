@@ -33,6 +33,7 @@ html {
 @media screen and (max-width: 768px) {
   body {
     align-items: flex-start;
+    padding: 20px 0 40px 0;
   }
 
   .arcade-machine {
