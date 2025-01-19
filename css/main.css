@@ -27,6 +27,7 @@ html {
   transform-origin: center center;
   position: relative;
   height: auto;
+  margin-bottom: 60px;
 }
 
 /* Mobile device media query */
@@ -45,12 +46,13 @@ html {
 /* laptop media query */
 @media screen and (min-width: 769px) and (max-width: 1366px) {
   body {
-    align-items: center;
+    align-items: flex-start;
+    padding: 40px 0;
   }
   .arcade-machine {
     transform: scale(0.85);
     margin: auto;
-    margin-bottom: 40px;
+    margin: 40px auto 80px auto;
   }
 }
 
