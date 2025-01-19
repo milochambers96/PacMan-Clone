@@ -422,8 +422,7 @@ function addSwipeControls() {
 
 ### Known Issues
 
-- Original known issues from November 2024 have been resolved
-- Continue monitoring mobile touch sensitivity for user feedback
+- Some minor spacing inconsistencies on laptop screens where the game content touches the bottom edge - view at 80% zoom for optimal laptop viewing
 
 ## Controls
 
