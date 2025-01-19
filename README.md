@@ -430,4 +430,4 @@ function addSwipeControls() {
 - Mobile: Swipe in desired direction (up/down/left/right)
 - Desktop: Arrow keys
 - Press the start button to begin the game
-- Collect all pellets without the ghosts catching you to complete the game
+- Collect all the pellets without the ghosts catching you to complete the game
